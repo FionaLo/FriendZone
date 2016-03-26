@@ -1,10 +1,34 @@
 {
-  "name": "FriendZone",
+  "name": "friendzone",
   "version": "0.0.1",
   "private": true,
   "scripts": {
     "start": "node ./startup.js"
   },
   "dependencies": {
-  }
+    "angular": "^1.5.3",
+    "angular-ui-router": "^0.2.18",
+    "body-parser": "^1.15.0",
+    "bootstrap": "^3.3.6",
+    "bootstrap-select": "^1.10.0",
+    "font-awesome": "^4.5.0",
+    "install": "^0.6.1",
+    "jquery": "^2.2.2",
+    "jquery-ui": "^1.10.5",
+    "mongoose": "^4.4.10",
+    "npm": "^3.8.3"
+  },
+  "description": "",
+  "main": "startup.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andrew-x/FriendZone.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/andrew-x/FriendZone/issues"
+  },
+  "homepage": "https://github.com/andrew-x/FriendZone#readme"
 }
