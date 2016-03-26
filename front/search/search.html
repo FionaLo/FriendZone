@@ -1,0 +1,169 @@
+<div class="container search-body">
+    <h2 class="page-header">Welcome to FriendZone!</h2>
+    <div class="row">
+        <!--profile corner-->
+        <div class="col-sm-12 col-md-4 search-profile">
+            <h3>Welcome Back, User!</h3>
+            <div class="text-center">
+                <img src="public/images/kyoto.jpg" class="avatar img-square img-thumbnail" alt="avatar">
+            </div>
+            <hr>
+            <button class="btn btn-success" data-toggle="modal" data-target="#event-modal">Create New Event</button>
+        </div>
+        <!-- Search controls -->
+        <div class="col-sm-12 col-md-8">
+            <h3>Search for New Friends!</h3>
+            <ul class="list-group search-list-group">
+                <li class="list-group-item">
+                    <div class="input-group">
+                        <span class="input-group-addon">Search:</span>
+                        <input type="text" class="form-control" placeholder="Hello, Is it me you're looking for?">
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    <div class="dropdown">
+                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            Show Me:
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                            <li><a href="#">Only Men</a></li>
+                            <li><a href="#">Only Women</a></li>
+                            <li><a href="#">It Doesn't Matter</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    <p>hello</p>
+                    <!--<label class="control-label col-xs-2">Ages:</label>-->
+                    <!--<select class="selectpicker col-xs-10">-->
+                        <!--<option value="young">18-20</option>-->
+                        <!--<option value="lessYoung">21-30</option>-->
+                        <!--<option value="notYoung">30+</option>-->
+                        <!--<option value="whoCares">It Doesn't Matter</option>-->
+                    <!--</select>-->
+                </li>
+                <li class="list-group-item">
+                    <p>hello</p>
+                    <!--<label class="control-label col-xs-2">Within:</label>-->
+                    <!--<select class="selectpicker col-xs-10">-->
+                        <!--<option value="close">10km</option>-->
+                        <!--<option value="lessClose">15km</option>-->
+                        <!--<option value="notReallyClose">20km</option>-->
+                        <!--<option value="far">25km</option>-->
+                        <!--<option value="whoCares">It Doesn't Matter</option>-->
+                    <!--</select>-->
+                </li>
+                <li class="list-group-item">
+                    <p>hello</p>
+                    <!--<label class="control-label col-xs-2">Sort By:</label>-->
+                    <!--<select class="selectpicker col-xs-10">-->
+                        <!--<option value="newest">Newly Arrived</option>-->
+                        <!--<option value="oldestOnSite">Longest time in FriendZone</option>-->
+                        <!--<option value="popular">Highest Rated</option>-->
+                        <!--<option value="sucky">Underdogs</option>-->
+                    <!--</select>-->
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="row search-results">
+        <ul class="list-group">
+            <li class="list-group-item clearfix">
+                <div class="col-sm-12 col-md-3 col-lg-4">
+                    <h3><a href="/profile">John Doe</a></h3>
+                    <div>
+                        <img src="public/images/kyoto.jpg" class="avatar img-square img-thumbnail" alt="avatar">
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-9 col-lg-8 list-controls search-list-controls">
+                    <h5> Average Rating: 4/5</h5>
+                    <button class="btn btn-default message-btn" data-toggle="modal" data-target="#message-modal">Send Message</button>
+                    <button class="btn btn-info invite-btn" data-toggle="modal" data-target="#invite-modal">Invite</button>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="row text-center">
+        <div class="col-lg-12">
+            <ul class="pagination">
+                <li><a href="#">&laquo;</a></li>
+                <li class="active"><a href="#">1</a></li>
+                <li><a href="#">2</a></li>
+                <li><a href="#">3</a></li>
+                <li><a href="#">4</a></li>
+                <li><a href="#">5</a></li>
+                <li><a href="#">&raquo;</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div id="message-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="comment">Message:</label>
+                    <textarea class="form-control" rows="5" id="comment"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Send</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="invite-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="event-select" class="control-label col-xs-2">Event:</label>
+                    <select id="event-select" class="selectpicker col-xs-10">
+                        <option>Dave's Birthday Party</option>
+                        <option>Pub Night</option>
+                        <option>Get Turnt 2015</option>
+                    </select>
+                    <br/>
+                    <label for="message">Message:</label>
+                    <textarea class="form-control" rows="5" id="message"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Send</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="event-modal" class="modal fade event-modal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="form-group search-form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon">Name:</span>
+                        <input type="text" class="form-control" placeholder="Awesome thing V12">
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Time:</span>
+                        <input type="text" class="form-control" placeholder="June 24, 2014 12:00AM">
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Location:</span>
+                        <input type="text" class="form-control" placeholder="Empire State Building">
+                    </div>
+                    <br/>
+                    <label for="description">Description:</label>
+                    <textarea class="form-control" rows="5" id="description"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Create</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

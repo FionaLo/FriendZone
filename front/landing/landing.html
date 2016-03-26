@@ -1,0 +1,23 @@
+<div class="landing-splash">
+    <div class="row login-wrapper">
+        <h1 class="landing-title">FriendZone</h1>
+        <button class="btn btn-primary" id="find-btn" ng-click="onClickFind()">Find Friends</button>
+        <div class="login-form" id="login-form">
+            <input type="text" class="form-control" placeholder="Email" ng-model="user.email"><br/>
+            <input type="password" class="form-control" placeholder="Password" ng-model="user.password"><br/>
+            <button class="btn btn-primary" ng-click="login()">Login</button><br/>
+            <div class="btn-group social-login" role="group">
+                <button type="button" class="btn btn-default"><i class="fa fa-google"></i></button>
+                <button type="button" class="btn btn-default"><i class="fa fa-facebook"></i></button>
+                <button type="button" class="btn btn-default" id="register-btn" ng-click="onClickRegister()">Register</button>
+            </div>
+        </div>
+        <div class="register-form" id="register-form">
+            <input type="text" class="form-control" placeholder="Username" ng-model="newUser.username"><br/>
+            <input type="email" class="form-control" placeholder="Email" ng-model="newUser.email"><br/>
+            <input type="password" class="form-control" placeholder="Password" ng-model="newUser.password"><br/>
+            <input type="password" class="form-control" placeholder="Confirm Password" ng-model="newUser.passwordConfirm"><br/>
+            <button type="submit" class="btn btn-primary" ng-click="register()">Register</button>
+        </div>
+    </div>
+</div>
