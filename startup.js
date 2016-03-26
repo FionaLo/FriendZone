@@ -7,10 +7,13 @@ var logger = require('morgan');
 var http = require('http');
 var debug = require('debug')('friendzone:server');
 
+// connect to Mongodb database
 mongoose.connect('mongodb://admin:admin@ds023118.mlab.com:23118/friendzone', function(err) {
     if (err) throw err;
     console.log('Successfully connected to MongoDB');
 });
+
+var api = require('./back/routes/api');
 
 var app = express();
 app.use(logger('dev'));
@@ -22,6 +25,8 @@ app.use("/node_modules", express.static(__dirname + "/node_modules"));
 app.get("/", function(req, res){
    res.sendFile(__dirname + '/index.html');
 });
+
+app.use('/api', api);
 
 var authenticationController = require('./back/controllers/authentication-controller.js');
 app.post("/api/user/signup", authenticationController.signup);
@@ -138,4 +143,3 @@ function onListening() {
         : 'port ' + addr.port;
     debug('Listening on ' + bind);
 }
-
