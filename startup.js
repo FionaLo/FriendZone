@@ -15,6 +15,7 @@ mongoose.connect('mongodb://admin:admin@ds023118.mlab.com:23118/friendzone', fun
 
 // api routes
 var api = require('./back/routes/api');
+var dev = require('./back/routes/dev');
 
 var app = express();
 app.use(logger('dev'));
@@ -32,12 +33,13 @@ app.use('/api', api);
 var authenticationController = require('./back/controllers/authentication-controller.js');
 // app.post("/api/user/signup", authenticationController.signup);
 // app.post("/api/user/login", authenticationController.login);
+app.use('/dev', dev);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
     var err = new Error('Not Found');
     err.status = 404;
-    next(err);
+    res.json({message: "404 Not Found"});
 });
 
 // error handlers
