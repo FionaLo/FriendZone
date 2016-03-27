@@ -18,8 +18,10 @@ var UserSchema = new Schema({
     group: {
         type: String,
         required: true
-    }
-
+    },
+    email: String,
+    description: String,
+    profile_image: String
 });
 
 UserSchema.pre('save', function(next) {
