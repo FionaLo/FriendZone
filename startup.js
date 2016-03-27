@@ -7,12 +7,13 @@ var logger = require('morgan');
 var http = require('http');
 var debug = require('debug')('friendzone:server');
 
-// connect to Mongodb database
+// connect to MongoDb database
 mongoose.connect('mongodb://admin:admin@ds023118.mlab.com:23118/friendzone', function(err) {
     if (err) throw err;
     console.log('Successfully connected to MongoDB');
 });
 
+// api routes
 var api = require('./back/routes/api');
 var dev = require('./back/routes/dev');
 
@@ -28,6 +29,10 @@ app.get("/", function(req, res){
 });
 
 app.use('/api', api);
+
+var authenticationController = require('./back/controllers/authentication-controller.js');
+// app.post("/api/user/signup", authenticationController.signup);
+// app.post("/api/user/login", authenticationController.login);
 app.use('/dev', dev);
 
 // catch 404 and forward to error handler
@@ -44,7 +49,7 @@ app.use(function(req, res, next) {
 if (app.get('env') === 'development') {
     app.use(function(err, req, res, next) {
         res.status(err.status || 500);
-        res.render('error', {
+        res.status(err.status).json('error', {
             message: err.message,
             error: err
         });
@@ -55,7 +60,7 @@ if (app.get('env') === 'development') {
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
     res.status(err.status || 500);
-    res.render('error', {
+    res.status(err.status).json('error', {
         message: err.message,
         error: {}
     });

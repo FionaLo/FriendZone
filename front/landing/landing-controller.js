@@ -13,7 +13,7 @@
             };
 
             $scope.register = function () {
-                $http.post('api/user/signup', $scope.newUser).success(function(response){
+                $http.post('signup', $scope.newUser).success(function(response){
                     $state.go('search');
                     $scope.authenticated = true;
                 }).error(function(error){
@@ -22,7 +22,7 @@
             };
 
             $scope.login = function () {
-                $http.post('api/user/login', $scope.user).success(function(response){
+                $http.post('login', $scope.user).success(function(response){
                     localStorage.setItem('User-Data', JSON.stringify(response));
                     $state.go('search');
                     $scope.authenticated = true;
