@@ -1,3 +1,5 @@
-/**
- * Created by andre on 2016-03-26.
- */
+(function () {
+    angular.module('FriendZone').controller('AdminController', ['$scope', '$state', '$http',
+        function ($scope, $state, $http) {
+        }]);
+}());

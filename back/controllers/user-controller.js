@@ -23,12 +23,13 @@ exports.createUsers = function (req, res) {
 
 // Create endpoint /api/users for GET
 exports.getUsers = function (req, res) {
-
-    User.find(function (err, users) {
-        if (err) res.send(err);
-
-        res.json(users);
-    })
+    User.find({'group': 'user'}, function (err, users) {
+        if (err){
+            res.error(err);
+        } else {
+            res.json(users);
+        }
+    });
 };
 
 // Create endpoint /api/users/:user_id for PUT
@@ -62,16 +63,6 @@ exports.deleteUser = function (req, res) {
             res.send(err);
 
         res.json({message: 'user deleted'});
-    });
-};
-
-exports.getUsers = function (req, res) {
-    User.find({'group': 'user'}, function (err, users) {
-        if (err){
-            res.error(err);
-        } else {
-            res.json(users);
-        }
     });
 };
 
