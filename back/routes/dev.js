@@ -5,7 +5,7 @@ var User = require('../datasets/user');
 var Event = require('../datasets/event');
 
 dev.get('/', function(req, res) {
-    res.json({ message: 'welcome to friendzone dev tools!' });
+    res.json({ message: 'welcome to dev tools!' });
 });
 
 dev.get('/clear-users', function(req, res){
