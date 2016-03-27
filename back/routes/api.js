@@ -12,4 +12,6 @@ api.get('/', function(req, res) {
 api.post("/api/user/signup", authenticationController.signup);
 api.post("/api/user/login", authenticationController.login);
 
+api.get("/user", userController.getUsers);
+
 module.exports = api;

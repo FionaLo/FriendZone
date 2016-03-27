@@ -5,7 +5,7 @@
 var User = require('../datasets/user');
 
 // Create endpoint /api/user for POST
-exports.createUsers = function(req, res) {
+exports.createUsers = function (req, res) {
 
     // Create a new user with properties that came from the POST data
     var user = new User({
@@ -14,17 +14,17 @@ exports.createUsers = function(req, res) {
         group: req.body.group
     });
 
-    user.save(function(err) {
+    user.save(function (err) {
         if (err) res.send(err);
 
-        res.json({ message: 'new user created' });
+        res.json({message: 'new user created'});
     });
 };
 
 // Create endpoint /api/users for GET
-exports.getUsers = function(req, res) {
+exports.getUsers = function (req, res) {
 
-    User.find(function(err, users) {
+    User.find(function (err, users) {
         if (err) res.send(err);
 
         res.json(users);
@@ -32,9 +32,9 @@ exports.getUsers = function(req, res) {
 };
 
 // Create endpoint /api/users/:user_id for PUT
-exports.putUser = function(req, res) {
+exports.putUser = function (req, res) {
     // Use the Event model to find a specific event
-    User.findById(req.params.user_id, function(err, user) {
+    User.findById(req.params.user_id, function (err, user) {
         if (err)
             res.send(err);
 
@@ -45,7 +45,7 @@ exports.putUser = function(req, res) {
         user.password = req.body.password;
 
         // Save the event and check for errors
-        user.save(function(err) {
+        user.save(function (err) {
             if (err)
                 res.send(err);
 
@@ -55,12 +55,23 @@ exports.putUser = function(req, res) {
 };
 
 // Create endpoint /api/users/:user_id for DELETE
-exports.deleteUser = function(req, res) {
+exports.deleteUser = function (req, res) {
     // Use the User model to find a specific event and remove it
-    User.findByIdAndRemove(req.params.user_id, function(err) {
+    User.findByIdAndRemove(req.params.user_id, function (err) {
         if (err)
             res.send(err);
 
-        res.json({ message: 'user deleted' });
+        res.json({message: 'user deleted'});
     });
 };
+
+exports.getUsers = function (req, res) {
+    User.find({'group': 'user'}, function (err, users) {
+        if (err){
+            res.error(err);
+        } else {
+            res.json(users);
+        }
+    });
+};
+
