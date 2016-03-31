@@ -21,12 +21,11 @@ api.route('/events/:event_id')
     .delete(passport.authenticate('basic', { session: false }), eventController.deleteEvent);
 
 api.route('/users')
-    .post(passport.authenticate('basic', { session: false }), userController.createUsers)
-    .get(passport.authenticate('basic', { session: false }), userController.getUsers)
+    .post(userController.createUsers)
+    .get(passport.authenticate('basic', { session: false }), userController.getUsers);
+
+api.route('/users/:user_id')
     .put(passport.authenticate('basic', { session: false }), userController.putUser)
     .delete(passport.authenticate('basic-admin', { session: false }), userController.deleteUser);
-
-api.post('/user/login', passport.authenticate('local-login'));
-api.post('/user/signup', passport.authenticate('local-signup'));
 
 module.exports = api;

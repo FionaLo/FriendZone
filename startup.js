@@ -31,12 +31,19 @@ app.get("/", function(req, res){
 app.use('/api', api);
 
 var passport = require('passport');
+app.use(passport.initialize());
+app.use(passport.session());
+
 require('./back/controllers/authentication-controller.js')(passport);
 app.post('/user/login',
-    passport.authenticate('local-login'));
+    passport.authenticate('local-login'), function(req,res){
+        res.json(req.user)
+    });
 
 app.post('/user/signup', 
-    passport.authenticate('local-signup'));
+    passport.authenticate('local-signup'), function(req,res){
+        res.json(req.user)
+    });
 
 app.use('/dev', dev);
 
@@ -54,7 +61,7 @@ app.use(function(req, res, next) {
 if (app.get('env') === 'development') {
     app.use(function(err, req, res, next) {
         res.status(err.status || 500);
-        res.status(err.status).json('error', {
+        res.status(status).json('error', {
             message: err.message,
             error: err
         });
