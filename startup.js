@@ -30,9 +30,14 @@ app.get("/", function(req, res){
 
 app.use('/api', api);
 
-var authenticationController = require('./back/controllers/authentication-controller.js');
-// app.post("/api/user/signup", authenticationController.signup);
-// app.post("/api/user/login", authenticationController.login);
+var passport = require('passport');
+require('./back/controllers/authentication-controller.js')(passport);
+app.post('/user/login',
+    passport.authenticate('local-login'));
+
+app.post('/user/signup', 
+    passport.authenticate('local-signup'));
+
 app.use('/dev', dev);
 
 // catch 404 and forward to error handler

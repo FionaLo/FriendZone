@@ -1,10 +1,6 @@
 var express = require('express');
 var dev = express.Router();
 
-var authenticationController = require('../controllers/authentication-controller.js');
-var eventController = require('../controllers/event-controller');
-var userController = require('../controllers/user-controller');
-
 var User = require('../datasets/user');
 var Event = require('../datasets/event');
 

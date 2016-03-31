@@ -1,12 +1,11 @@
 var express = require('express');
 var api = express.Router();
 
-var authenticationController = require('../controllers/authentication-controller.js');
+var passport = require('passport');
+var authenticationController = require('../controllers/authentication-controller')(passport);
+
 var eventController = require('../controllers/event-controller');
 var userController = require('../controllers/user-controller');
-
-var passport = require('passport');
-require('../controllers/authentication-controller')(passport);
 
 api.get('/', function(req, res) {
     res.json({ message: 'welcome to friendzone api!' });
@@ -25,7 +24,7 @@ api.route('/users')
     .post(passport.authenticate('basic', { session: false }), userController.createUsers)
     .get(passport.authenticate('basic', { session: false }), userController.getUsers)
     .put(passport.authenticate('basic', { session: false }), userController.putUser)
-    .delete(passport.authenticate('basic-admin', { session: false }), userController.deleteUser);;
+    .delete(passport.authenticate('basic-admin', { session: false }), userController.deleteUser);
 
 api.get("/users", userController.getUsers);
 
