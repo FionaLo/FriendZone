@@ -21,4 +21,5 @@
                 controller: 'AdminController'
             });
         });
+
 }());
