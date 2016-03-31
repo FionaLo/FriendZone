@@ -26,6 +26,7 @@ api.route('/users')
     .put(passport.authenticate('basic', { session: false }), userController.putUser)
     .delete(passport.authenticate('basic-admin', { session: false }), userController.deleteUser);
 
-api.get("/users", userController.getUsers);
+app.post('/user/login', passport.authenticate('local-login'));
+app.post('/user/signup', passport.authenticate('local-signup'));
 
 module.exports = api;
