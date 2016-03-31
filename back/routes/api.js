@@ -23,11 +23,9 @@ api.route('/events/:event_id')
 
 api.route('/users')
     .post(passport.authenticate('basic', { session: false }), userController.createUsers)
-    .get(passport.authenticate('basic', { session: false }), userController.getUsers);
-
-api.route('/users/:user_id')
+    .get(passport.authenticate('basic', { session: false }), userController.getUsers)
     .put(passport.authenticate('basic', { session: false }), userController.putUser)
-    .delete(passport.authenticate('basic-admin', { session: false }), userController.deleteUser);
+    .delete(passport.authenticate('basic-admin', { session: false }), userController.deleteUser);;
 
 api.get("/users", userController.getUsers);
 

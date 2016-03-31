@@ -23,7 +23,7 @@ exports.createUsers = function (req, res) {
 
 // Create endpoint /api/users for GET
 exports.getUsers = function (req, res) {
-    User.find({'group': 'user'}, function (err, users) {
+    User.find(req['query'], function (err, users) {
         if (err){
             res.error(err);
         } else {
@@ -58,7 +58,7 @@ exports.putUser = function (req, res) {
 // Create endpoint /api/users/:user_id for DELETE
 exports.deleteUser = function (req, res) {
     // Use the User model to find a specific event and remove it
-    User.findByIdAndRemove(req.params.user_id, function (err) {
+    User.findByIdAndRemove(req['query']['user_id'], function (err) {
         if (err)
             res.send(err);
 

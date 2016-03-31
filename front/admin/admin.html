@@ -3,141 +3,47 @@
     <h2 class="page-header">Admin</h2>
     <div class="panel panel-default">
         <ul class="list-group">
-            <li class="list-group-item">Number of Users: 250</li>
-            <li class="list-group-item">Number of Events: 50</li>
-            <li class="list-group-item">Reported Users: 15</li>
+            <li class="list-group-item">Number of Users: {{user_count}}</li>
+            <li class="list-group-item">Number of Events: {{event_count}}</li>
+            <li class="list-group-item">Reported Users: {{reported_count}}</li>
         </ul>
     </div>
-    <div class="row">
-        <ul class="nav nav-pills">
-            <li class="active"><a href="#users" data-toggle="tab">All Users</a></li>
-            <li><a href="#events" data-toggle="tab">All Events</a></li>
-            <li><a href="#reported" data-toggle="tab">Reported Users</a></li>
-        </ul>
-        <div class="tab-content">
-            <div class="tab-pane active" id="users">
-                <ul class="list-group">
-                    <li class="list-group-item clearfix">
-                        <div class="col-xs-12 col-md-6 profiles">
-                            <h3><a href="/profile">Dave</a></h3>
-                        </div>
-                        <div class="col-xs-12 col-md-6 profiles"><br>
-                            <button class="btn btn-primary" data-toggle="modal" data-target="#edit-user-modal">Edit User</button>
-                            <button class="btn btn-danger" data-toggle="modal" data-target="#confirm-modal">Delete User</button>
-                        </div>
-                    </li>
-                </ul>
-                <div class="row text-center">
-                    <div class="col-lg-12">
-                        <ul class="pagination">
-                            <li>
-                                <a href="#">&laquo;</a>
-                            </li>
-                            <li class="active">
-                                <a href="#">1</a>
-                            </li>
-                            <li>
-                                <a href="#">2</a>
-                            </li>
-                            <li>
-                                <a href="#">3</a>
-                            </li>
-                            <li>
-                                <a href="#">4</a>
-                            </li>
-                            <li>
-                                <a href="#">5</a>
-                            </li>
-                            <li>
-                                <a href="#">&raquo;</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+    <ul class="list-group">
+        <li class="list-group-item clearfix" ng-repeat="user in users">
+            <div class="col-xs-12 col-md-6 profiles">
+                <h3><a href="/profile">{{user.username}}</a></h3>
             </div>
-            <div class="tab-pane" id="events">
-                <ul class="list-group">
-                    <li class="list-group-item clearfix">
-                        <div class="col-xs-12 col-md-6 profiles">
-                            <h3><a href="/event">Dave's Birthday Party</a></h3>
-                        </div>
-                        <div class="col-xs-12 col-md-6 profiles"><br>
-                            <button class="btn btn-primary" data-toggle="modal" data-target="#edit-event-modal">Edit Event</button>
-                            <button class="btn btn-danger" data-toggle="modal" data-target="#confirm-modal">Delete Event</button>
-                        </div>
-                    </li>
-                </ul>
-                <div class="row text-center">
-                    <div class="col-lg-12">
-                        <ul class="pagination">
-                            <li>
-                                <a href="#">&laquo;</a>
-                            </li>
-                            <li class="active">
-                                <a href="#">1</a>
-                            </li>
-                            <li>
-                                <a href="#">2</a>
-                            </li>
-                            <li>
-                                <a href="#">3</a>
-                            </li>
-                            <li>
-                                <a href="#">4</a>
-                            </li>
-                            <li>
-                                <a href="#">5</a>
-                            </li>
-                            <li>
-                                <a href="#">&raquo;</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+            <div class="col-xs-12 col-md-6 profiles"><br>
+                <button class="btn btn-primary">Edit User</button>
+                <button class="btn btn-danger" ng-click="deleteUser(user);">Delete User</button>
             </div>
-            <div class="tab-pane" id="reported">
-                <ul class="list-group">
-                    <li class="list-group-item clearfix">
-                        <div class="col-xs-12 col-md-6 profiles">
-                            <h3><a href="/profile">Dave</a></h3>
-                        </div>
-                        <div class="col-xs-12 col-md-6 profiles"><br>
-                            <button class="btn btn-primary" data-toggle="modal" data-target="#report-modal">See Report</button>
-                            <button class="btn btn-danger" data-toggle="modal" data-target="#confirm-modal">Delete User</button>
-                        </div>
-                    </li>
-                </ul>
-                <div class="row text-center">
-                    <div class="col-lg-12">
-                        <ul class="pagination">
-                            <li>
-                                <a href="#">&laquo;</a>
-                            </li>
-                            <li class="active">
-                                <a href="#">1</a>
-                            </li>
-                            <li>
-                                <a href="#">2</a>
-                            </li>
-                            <li>
-                                <a href="#">3</a>
-                            </li>
-                            <li>
-                                <a href="#">4</a>
-                            </li>
-                            <li>
-                                <a href="#">5</a>
-                            </li>
-                            <li>
-                                <a href="#">&raquo;</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+        </li>
+    </ul>
+    <ul class="list-group">
+        <li class="list-group-item clearfix" ng-repeat="event in events">
+            <div class="col-xs-12 col-md-6 profiles">
+                <h3><a href="/profile">{{user.username}}</a></h3>
             </div>
-        </div>
-    </div>
+            <div class="col-xs-12 col-md-6 profiles"><br>
+                <button class="btn btn-primary" data-toggle="modal" data-target="#edit-user-modal">Edit User</button>
+                <button class="btn btn-danger" data-toggle="modal" data-target="#confirm-modal">Delete User</button>
+            </div>
+        </li>
+    </ul>
+    <ul class="list-group">
+        <li class="list-group-item clearfix" ng-repeat="reported in reporteds">
+            <div class="col-xs-12 col-md-6 profiles">
+                <h3><a href="/profile">{{reported.username}}</a></h3>
+            </div>
+            <div class="col-xs-12 col-md-6 profiles"><br>
+                <button class="btn btn-primary" data-toggle="modal" data-target="#edit-user-modal">Edit User</button>
+                <button class="btn btn-danger" ng-click="deleteUser(user)">Delete User</button>
+            </div>
+        </li>
+    </ul>
 </div>
+
+<!-- -------------------------------------MODALS------------------------------ -->
 <div id="confirm-modal" class="modal fade event-modal" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
