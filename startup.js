@@ -1,6 +1,7 @@
 var express = require('express');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
 var path = require('path');
 var session = require('express-session');
 var logger = require('morgan');
@@ -20,6 +21,14 @@ var dev = require('./back/routes/dev');
 var app = express();
 app.use(logger('dev'));
 app.use(bodyParser.json());
+app.use(cookieParser());
+app.use(session({
+    cookie: { maxAge: 60000 },
+    secret: 'iamlonely',
+    resave: true,
+    saveUninitialized: true
+}));
+
 app.use("/public", express.static(__dirname + "/public"));
 app.use("/front", express.static(__dirname + "/front"));
 app.use("/node_modules", express.static(__dirname + "/node_modules"));
