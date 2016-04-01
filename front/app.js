@@ -2,7 +2,6 @@
     angular.module('FriendZone', ['ui.router', 'ui.bootstrap'])
         .config(function($stateProvider, $urlRouterProvider){
             $urlRouterProvider.otherwise('/landing');
-            console.log("hello");
             $stateProvider.state('landing', {
                 url: '/landing',
                 templateUrl: 'front/landing/landing.html',
@@ -21,5 +20,4 @@
                 controller: 'AdminController'
             });
         });
-
 }());
