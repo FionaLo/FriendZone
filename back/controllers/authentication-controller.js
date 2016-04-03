@@ -35,7 +35,7 @@ module.exports = function(passport) {
 
                 // if no user is found, return the message
                 if (!user)
-                    return done(null, false, req.flash('message', 'No user found.'));
+                    return done(null, false);
 
                 // Verify if the password is correct
                 user.comparePassword(password, function (err, isMatch) {
@@ -44,7 +44,7 @@ module.exports = function(passport) {
                     }
                     // Password did not match
                     if (!isMatch) {
-                        return done(null, false, req.flash('message', 'Oops! Wrong password.'));
+                        return done(null, false);
                     }
                     // return user
                     return done(null, user);
@@ -142,7 +142,7 @@ module.exports = function(passport) {
     ));
 
     // Define a middleware function to be used for every secured routes
-    exports.auth = function ensureAuthenticated(req, res, next){
+    exports.isAuthed = function ensureAuthenticated(req, res, next){
         if (!req.isAuthenticated())
             res.send(401);
         else

@@ -1,6 +1,6 @@
 (function () {
-    angular.module('FriendZone').controller('LandingController', ['$scope', '$state', '$http',
-        function ($scope, $state, $http) {
+    angular.module('FriendZone').controller('LandingController', ['$scope', '$state', '$http', 'Flash',
+        function ($scope, $state, $http, Flash) {
             $scope.onClickFind = function () {
                 $("#find-btn").fadeOut("slow", function(){
                     $("#login-form").fadeIn("medium");
@@ -29,7 +29,11 @@
                     $scope.authenticated = true;
                 }).error(function(error){
                     console.log(error);
+                    var message = '<strong>Error!</strong> Wrong username or passpword.';
+                    Flash.create('danger', message);
                 });
             }
+
+
         }]);
 }());

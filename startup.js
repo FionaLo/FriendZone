@@ -4,6 +4,7 @@ var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var path = require('path');
 var session = require('express-session');
+var MongoStore = require('connect-mongo')(session);
 var logger = require('morgan');
 var http = require('http');
 var debug = require('debug')('friendzone:server');
@@ -26,7 +27,12 @@ app.use(session({
     cookie: { maxAge: 60000 },
     secret: 'iamlonely',
     resave: true,
-    saveUninitialized: true
+    saveUninitialized: true,
+    // store: new MongoStore({
+    //     mongooseConnection: mongoose.connection,
+    //     autoRemove: 'interval',
+    //     autoRemoveInterval: 10
+    // })
 }));
 
 app.use("/public", express.static(__dirname + "/public"));
