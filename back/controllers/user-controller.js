@@ -3,6 +3,8 @@
  */
 
 var User = require('../datasets/user');
+var jwt = require('jwt-simple');
+var authConfig = require('../config/auth');
 
 // Create endpoint /api/user for POST
 exports.createUsers = function (req, res) {
@@ -31,6 +33,27 @@ exports.getUsers = function (req, res) {
         }
     });
 };
+
+// exports.getUsers2 = function(req, res) {
+//     var token = req.body.token || req.query.token || req.headers['x-access-token'];
+//     if (token) {
+//         jwt.decode(token, authConfig.secret, function(err, decoded) {
+//             if (err) {
+//                 return res.json({ success: false, message: 'Failed to authenticate token.' });
+//             } else {
+//                 // if everything is good, save to request for use in other routes
+//                 req.decoded = decoded;
+//                 User.find(req['query'], function(err, users) {
+//                     if (err) {
+//                         res.error(err);
+//                     } else {
+//                         res.json(users);
+//                     }
+//                 });
+//             }
+//         });
+//     }
+// };
 
 // Create endpoint /api/users/:user_id for PUT
 exports.putUser = function (req, res) {
@@ -65,4 +88,3 @@ exports.deleteUser = function (req, res) {
         res.json({message: 'user deleted'});
     });
 };
-

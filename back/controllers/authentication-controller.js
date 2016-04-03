@@ -1,7 +1,11 @@
+var jwt = require('jwt-simple');
+var authConfig = require('../config/auth');
 var User = require('../datasets/user');
 
 var LocalStrategy = require('passport-local').Strategy;
 var BasicStrategy = require('passport-http').BasicStrategy;
+var JwtStrategy = require('passport-jwt').Strategy,
+    ExtractJwt = require('passport-jwt').ExtractJwt;
 
 module.exports = function(passport) {
 
@@ -141,11 +145,27 @@ module.exports = function(passport) {
         }
     ));
 
-    // Define a middleware function to be used for every secured routes
-    exports.isAuthed = function ensureAuthenticated(req, res, next){
-        if (!req.isAuthenticated())
-            res.send(401);
-        else
-            next();
-    };
+    // JWT strategy
+    var opts = {};
+    opts.jwtFromRequest = ExtractJwt.fromAuthHeader() || ExtractJwt.fromBodyField('token');
+    opts.secretOrKey = authConfig.secret;
+
+    passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
+        User.findOne({ username: jwt_payload.sub }, function(err, user) {
+            if (err) return done(err, false);
+
+            if (!user) return done(null, false);
+
+            return done(null, user);
+        })
+    }));
+
+};
+
+// Define a middleware function to be used for every secured routes
+exports.ensureAuthed = function ensureAuthenticated(req, res, next){
+    if (!req.isAuthenticated())
+        res.send(401);
+    else
+        next();
 };

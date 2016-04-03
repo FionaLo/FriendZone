@@ -24,11 +24,13 @@
     "install": "^0.6.1",
     "jquery": "^2.2.2",
     "jquery-ui": "^1.10.5",
+    "jwt-simple": "^0.5.0",
     "mongoose": "^4.4.10",
     "morgan": "^1.7.0",
     "npm": "^3.8.3",
     "passport": "^0.3.2",
     "passport-http": "^0.3.0",
+    "passport-jwt": "^2.0.0",
     "passport-local": "^1.0.0"
   },
   "description": "",

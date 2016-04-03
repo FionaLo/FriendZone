@@ -13,16 +13,18 @@
             };
 
             $scope.register = function () {
-                $http.post('user/signup', $scope.newUser).success(function(response){
+                $http.post('api/signup', $scope.newUser).success(function(response){
                     $state.go('search');
                     $scope.authenticated = true;
                 }).error(function(error){
                     console.log(error);
+                    var message = '<strong>Error!</strong>';
+                    Flash.create('danger', message);
                 });
             };
 
             $scope.login = function () {
-                $http.post('user/login', $scope.user).success(function(response){
+                $http.post('api/login', $scope.user).success(function(response){
                     // localStorage.setItem('User-Data', JSON.stringify(response));
                     console.log(response);
                     $state.go('search');

@@ -9,6 +9,8 @@ var logger = require('morgan');
 var http = require('http');
 var debug = require('debug')('friendzone:server');
 
+var jwt = require('jwt-simple');
+
 // connect to MongoDb database
 mongoose.connect('mongodb://admin:admin@ds023118.mlab.com:23118/friendzone', function(err) {
     if (err) throw err;
@@ -35,6 +37,10 @@ app.use(session({
     // })
 }));
 
+var passport = require('passport');
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use("/public", express.static(__dirname + "/public"));
 app.use("/front", express.static(__dirname + "/front"));
 app.use("/node_modules", express.static(__dirname + "/node_modules"));
@@ -44,22 +50,6 @@ app.get("/", function(req, res){
 });
 
 app.use('/api', api);
-
-var passport = require('passport');
-app.use(passport.initialize());
-app.use(passport.session());
-
-require('./back/controllers/authentication-controller.js')(passport);
-app.post('/user/login',
-    passport.authenticate('local-login'), function(req,res){
-        res.json(req.user)
-    });
-
-app.post('/user/signup', 
-    passport.authenticate('local-signup'), function(req,res){
-        res.json(req.user)
-    });
-
 app.use('/dev', dev);
 
 // catch 404 and forward to error handler

@@ -12,14 +12,11 @@
                 });
             };
             $scope.deleteUser = function(user){
-                $http.delete('api/users', {
-                    params: {
-                        user_id: user._id
-                    }
-                }).success(function (res){
-                    console.log(res);
+                $http.delete('api/users/' + user._id)
+                    .success(function (res){
+                        console.log(res);
                     $scope.getUsers();
-                });
+                    });
             };
             $scope.getUsers();
         }]);
