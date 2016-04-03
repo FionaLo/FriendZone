@@ -25,13 +25,12 @@
 
             $scope.login = function () {
                 $http.post('api/login', $scope.user).success(function(response){
-                    // localStorage.setItem('User-Data', JSON.stringify(response));
                     console.log(response);
                     $state.go('search');
                     $scope.authenticated = true;
                 }).error(function(error){
                     console.log(error);
-                    var message = '<strong>Error!</strong> Wrong username or passpword.';
+                    var message = '<strong>Error!</strong> Wrong username or password.';
                     Flash.create('danger', message);
                 });
             }

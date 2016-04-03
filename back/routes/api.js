@@ -9,6 +9,7 @@ var authConfig = require('../config/auth');
 var eventController = require('../controllers/event-controller');
 var userController = require('../controllers/user-controller');
 
+
 api.get('/', function(req, res) {
     res.json({ message: 'welcome to friendzone api!' });
 });
@@ -24,25 +25,20 @@ api.route('/events/:event_id')
 
 api.route('/users')
     .post(userController.createUsers)
-    .get(userController.getUsers);
+    .get(passport.authenticate('basic', {session: false}), userController.getUsers);
 
 api.route('/users/:user_id')
     .put(passport.authenticate('basic', { session: false }), userController.putUser)
     .delete(passport.authenticate('basic-admin', { session: false }), userController.deleteUser);
 
 api.post('/login',
-    passport.authenticate('local-login'), function(req,res){
-        res.json(req.user);
+    passport.authenticate('local-login', {session: false }), function(req,res){
+        var token = jwt.encode({ username: req.user.username }, authConfig.secret);
+        res.json({
+            user: req.user,
+            token: token
+        });
     });
-
-// api.post('/login', function(req, res, next) {
-//     passport.authenticate('local-login', function(err, user) {
-//         //user has authenticated correctly thus we create a JWT token
-//         var token = jwt.encode(req.body.username, authConfig.secret);
-//         res.json(req.user);
-//
-//     }) (req, res, next);
-// });
 
 api.post('/signup',
     passport.authenticate('local-register'), function(req,res){

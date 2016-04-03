@@ -76,7 +76,7 @@ module.exports = function(passport) {
 
                     // check to see if theres already a user with that email
                     if (user) {
-                        return done(null, false, req.flash('message', 'That username is already taken.'));
+                        return done(null, false);
                     } else {
 
                         // create the user
@@ -145,13 +145,13 @@ module.exports = function(passport) {
         }
     ));
 
-    // JWT strategy
+    // Jwt strategy
     var opts = {};
-    opts.jwtFromRequest = ExtractJwt.fromAuthHeader() || ExtractJwt.fromBodyField('token');
+    opts.jwtFromRequest = ExtractJwt.fromBodyField('token');
     opts.secretOrKey = authConfig.secret;
 
-    passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
-        User.findOne({ username: jwt_payload.sub }, function(err, user) {
+    passport.use('jwt', new JwtStrategy(opts, function(jwt_payload, done) {
+        User.findOne({ username: jwt_payload.username }, function(err, user) {
             if (err) return done(err, false);
 
             if (!user) return done(null, false);
