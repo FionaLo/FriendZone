@@ -46,7 +46,8 @@ app.use("/front", express.static(__dirname + "/front"));
 app.use("/node_modules", express.static(__dirname + "/node_modules"));
 
 app.get("/", function(req, res){
-   res.sendFile(__dirname + '/index.html');
+    console.log('Cookies: ', req.cookies);
+    res.sendFile(__dirname + '/index.html');
 });
 
 app.use('/api', api);

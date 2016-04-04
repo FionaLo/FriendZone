@@ -25,7 +25,7 @@ api.route('/events/:event_id')
 
 api.route('/users')
     .post(userController.createUsers)
-    .get(passport.authenticate('basic', {session: false}), userController.getUsers);
+    .get(passport.authenticate('jwt', {session: false}), userController.getUsers);
 
 api.route('/users/:user_id')
     .put(passport.authenticate('basic', { session: false }), userController.putUser)
