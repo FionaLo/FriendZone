@@ -21,7 +21,7 @@ var UserSchema = new Schema({
     },
     email: String,
     description: String,
-    profile_image: String
+    profile_image: String,
 });
 
 UserSchema.pre('save', function(next) {
