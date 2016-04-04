@@ -1,11 +1,13 @@
-var jwt = require('jwt-simple');
-var authConfig = require('../config/auth');
+var jwt = require('jsonwebtoken');
+var secret = require('../config/auth').secret;
 var User = require('../datasets/user');
+var Token = require('../datasets/token');
 
 var LocalStrategy = require('passport-local').Strategy;
 var BasicStrategy = require('passport-http').BasicStrategy;
 var JwtStrategy = require('passport-jwt').Strategy,
     ExtractJwt = require('passport-jwt').ExtractJwt;
+var BearerStrategy = require('passport-http-bearer').Strategy;
 
 module.exports = function(passport) {
 
@@ -147,11 +149,11 @@ module.exports = function(passport) {
 
     // Jwt strategy
     var opts = {};
-    opts.jwtFromRequest = ExtractJwt.fromBodyField('token');
-    opts.secretOrKey = authConfig.secret;
+    opts.jwtFromRequest = ExtractJwt.fromAuthHeader();
+    opts.secretOrKey = secret;
 
-    passport.use('jwt', new JwtStrategy(opts, function(jwt_payload, done) {
-        User.findOne({ username: jwt_payload.sub }, function(err, user) {
+    passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
+        User.findOne({ username: jwt_payload.username }, function(err, user) {
             if (err) return done(err, false);
 
             if (!user) return done(null, false);
@@ -160,6 +162,38 @@ module.exports = function(passport) {
         })
     }));
 
+    // Bearer Strategy
+    passport.use('bearer', new BearerStrategy(
+        function(accessToken, callback) {
+            try {
+                //we attempt to decode the token the user sends with his requests
+                Token.findOne({ value: accessToken }, function(err, token) {
+
+                    if (err) return callback(err);
+
+                    if (!token) return callback(null, false);
+
+                    var decoded = jwt.verify(token, secret, function(err, decoded) {
+                        console.log(decoded);
+                    });
+                    //we find the user that has made the request
+                    User.findOne({ username: decoded.username }, function (err, user) {
+                        if (err) { return callback(err); }
+                        if (!user) {
+                            return callback(null, false); //no such user
+                        }
+                        else {
+                            return callback(null, user, { scope: '*' }); //allows the call chain to continue to the intented route
+                        }
+                    });
+                });
+
+            }
+            catch(err){
+                return callback(null, false); //returns a 401 to the caller
+            }
+        }
+    ));
 };
 
 // Define a middleware function to be used for every secured routes
