@@ -19,10 +19,7 @@ api.get('/', function(req, res) {
 
 api.route('/events')
     .post(passport.authenticate(['jwt', 'basic'], { session: false }), eventController.postEvents)
-    .get(passport.authenticate(['jwt', 'basic'], { session: false }), eventController.getEvents);
-
-api.route('/events/:event_id')
-    .get(passport.authenticate(['jwt', 'basic'], { session: false }), eventController.getEvent)
+    .get(passport.authenticate(['jwt', 'basic'], { session: false }), eventController.getEvents)
     .put(passport.authenticate(['jwt', 'basic'], { session: false }), eventController.putEvent)
     .delete(passport.authenticate(['jwt', 'basic'], { session: false }), eventController.deleteEvent);
 
@@ -31,6 +28,9 @@ api.route('/users')
     .get(passport.authenticate(['jwt', 'basic'], { session: false }), userController.getUsers)
     .put(passport.authenticate(['jwt', 'basic'], { session: false }), userController.putUser)
     .delete(passport.authenticate(['jwt', 'basic-admin'], { session: false }), userController.deleteUser);
+
+api.route('/users/current')
+    .get(passport.authenticate(['jwt', 'basic'], { session: false }), userController.getCurrentUser);
 
 api.post('/login',
     passport.authenticate('local-login'), function(req,res){

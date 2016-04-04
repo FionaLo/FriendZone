@@ -1,13 +1,18 @@
 (function () {
-    angular.module('FriendZone').controller('SearchController', ['$scope', '$state', '$http',
-        function ($scope, $state, $http) {
+    angular.module('FriendZone').controller('SearchController', ['$scope', '$state', '$http', '$uibModal',
+        function ($scope, $state, $http, $uibModal) {
 
             $scope.init = function () {
                 $scope.filteredUsers = [];
                 $scope.currentPage = 1;
                 $scope.pageSize = 10;
-
                 $scope.updateUserList();
+
+                $http.get('api/users/current').success(function(req){
+                    $scope.current = req;
+                }).error(function (err) {
+                    console.log(err);
+                });
             };
 
             $scope.updateUserList = function(){
@@ -20,6 +25,23 @@
                     }
                 }).success(function (res) {
                     $scope.users = res;
+                    $scope.pageChanged(1);
+                });
+            };
+
+            $scope.openNewEvent = function () {
+                var modalInstance = $uibModal.open({
+                    templateUrl: 'new-event-modal',
+                    controller: 'NewEventModalController'
+                });
+
+                modalInstance.result.then(function (event) {
+                    $http.post('api/events', event).success(function (res) {
+                        console.log(res);
+                    }).error(function (err) {
+                        console.log(err);
+                    });
+                }, function () {
                 });
             };
 
@@ -32,6 +54,28 @@
             };
 
             $scope.init();
+        }]);
+    angular.module('FriendZone').controller('NewEventModalController', ['$scope', '$state', '$http', '$uibModalInstance',
+        function($scope, $state, $http, $uibModalInstance){
+            $scope.dateFormat = 'dd-MMMM-yyyy';
+            $scope.dateOptions = {
+                formatYear: 'yy',
+                maxDate: new Date(2020, 5, 22),
+                minDate: new Date(),
+                startingDay: 1
+            };
+            $scope.datePopup = {
+                opened: false
+            };
+            $scope.openDatePopup = function() {
+                $scope.datePopup.opened = true;
+            };
+            $scope.create = function () {
+                $uibModalInstance.close($scope.event);
+            };
+            $scope.cancel = function () {
+                $uibModalInstance.dismiss('cancel');
+            };
         }]);
 }());
 

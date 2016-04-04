@@ -7,15 +7,15 @@ var Event = require('../datasets/event');
 // Create endpoint /api/events for POSTS
 exports.postEvents = function(req, res) {
     // Create a new instance of the Event model
-    var event = new Event();
-
-    // Set the event properties that came from the POST data
-    event.name = req.body.name;
-    event.description = req.body.description;
-    // TODO: handle date
+    var event = new Event({
+        name: req.body.name,
+        date: req.body.date,
+        description: req.body.description
+    });
 
     event.save(function(err) {
-        if (err) res.send(err);
+        if (err)
+            res.send(err);
 
         res.json({
             message: 'event created',

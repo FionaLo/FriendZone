@@ -35,4 +35,9 @@ dev.get('/init-users', function(req, res){
     res.json({message: "Users initialized"});
 });
 
+dev.get('/init-events', function(req, res){
+
+    res.json({message: "Events initialized"});
+});
+
 module.exports = dev;

@@ -92,3 +92,12 @@ exports.deleteUser = function (req, res) {
         res.json({message: 'user deleted'});
     });
 };
+
+exports.getCurrentUser = function (req, res) {
+    User.findById(req.user._id, function (err, userData) {
+        if (err)
+            res.send(err);
+        var user = userData;
+        res.json(user);
+    });
+};
