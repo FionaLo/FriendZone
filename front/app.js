@@ -19,7 +19,8 @@
                 templateUrl: 'front/admin/admin.html',
                 controller: 'AdminController'
             });
-        }).factory('data-bus', function () {
+        });
+        angular.module('FriendZone').factory('data-bus', function () {
             var data = {};
             return {
                 set: function(data){
@@ -31,18 +32,45 @@
                     return temp;
                 }
             }
-        }).factory('auth', function () {
-            var current;
+        });
+    angular.module('FriendZone').factory('auth', ['$http', function ($http) {
+            var current = null;
+            var authenticated = false;
             return {
-                login: function (){
-
+                login: function (user, callback){
+                    $http.post('api/login', user).success(function(res){
+                        callback(true);
+                    }).error(function(error){
+                        callback(false);
+                    });
                 },
                 logout: function (){
-
+                    current = null;
                 },
-                getCurrent: function(){
-                    return current;
+                register: function (user, callback){
+                    $http.post('api/signup', user).success(function(response){
+                        callback(true);
+                    }).error(function(error){
+                        callback(false);
+                    });
+                },
+                isAuthenticated: function (){
+                    return current != null;
+                },
+                getCurrent: function(callback){
+                    if (current != null){
+                        callback(current);
+                    } else {
+                        $http.get('api/users/current').success(function(res){
+                            current = res;
+                            callback(current);
+                        }).error(function(err){
+                            console.log(err);
+                            current = null;
+                            callback(current);
+                        });
+                    }
                 }
             }
-        });
+        }]);
 }());

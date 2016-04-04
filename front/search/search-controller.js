@@ -1,17 +1,14 @@
 (function () {
-    angular.module('FriendZone').controller('SearchController', ['$scope', '$state', '$http', '$uibModal',
-        function ($scope, $state, $http, $uibModal) {
+    angular.module('FriendZone').controller('SearchController', ['$scope', '$state', '$http', '$uibModal', 'auth',
+        function ($scope, $state, $http, $uibModal, auth) {
 
             $scope.init = function () {
                 $scope.filteredUsers = [];
                 $scope.currentPage = 1;
                 $scope.pageSize = 10;
                 $scope.updateUserList();
-
-                $http.get('api/users/current').success(function(req){
-                    $scope.current = req;
-                }).error(function (err) {
-                    console.log(err);
+                auth.getCurrent(function(current){
+                    $scope.current = current;
                 });
             };
 
