@@ -35,15 +35,19 @@ exports.getUsers = function (req, res) {
 // Create endpoint /api/users/:user_id for PUT
 exports.putUser = function (req, res) {
     // Use the Event model to find a specific event
-    User.findById(req.params.user_id, function (err, user) {
+    User.findById(req.body._id, function (err, userData) {
         if (err)
             res.send(err);
-
+        var user = userData;
         // Update the existing user username
-        user.username = req.body.name;
+        user.username = req.body.username;
 
         // Update the existing user password
         user.password = req.body.password;
+
+        user.email = req.body.email;
+        user.reported = req.body.reported;
+        user.reported_text = req.body.reported_text;
 
         // Save the event and check for errors
         user.save(function (err) {

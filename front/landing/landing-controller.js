@@ -24,7 +24,6 @@
             $scope.login = function () {
                 $http.post('user/login', $scope.user).success(function(response){
                     // localStorage.setItem('User-Data', JSON.stringify(response));
-                    console.log(response);
                     $state.go('search');
                     $scope.authenticated = true;
                 }).error(function(error){

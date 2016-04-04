@@ -22,16 +22,15 @@ dev.get('/clear-events', function(req, res){
 
 dev.get('/init-users', function(req, res){
     var test = new User({username: "test", password: "test", group: "user",
-        email: "test@test.com", description: "", profile_image: ""});
+        email: "test@test.com", description: "", profile_image: "", reported: true,
+        reported_text: "Just sucks"});
     test.save();
-    var test1 = new User({username: "test1", password: "test1", group: "user",
-        email: "test1@test1.com", description: "", profile_image: ""});
-    test1.save();
-    var test2 = new User({username: "test2", password: "test2", group: "user",
-        email: "test2@test2.com", description: "", profile_image: ""});
-    test2.save();
-    var admin = new User({username: "admin", password: "admin", group: "admin",
-        email: "admin@admin.com", description: "", profile_image: ""});
+    for (var i = 0; i < 10; i++){
+        var testI = new User({username: "test" + i, password: "test" + i, group: "user",
+            email: "test" + i + "@test" + i + ".com", description: "", profile_image: ""});
+        testI.save();
+    }
+    var admin = new User({username: 'admin', password: 'admin', group: 'admin'});
     admin.save();
     res.json({message: "Users initialized"});
 });

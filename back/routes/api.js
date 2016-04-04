@@ -22,10 +22,9 @@ api.route('/events/:event_id')
 
 api.route('/users')
     .post(userController.createUsers)
-    .get(passport.authenticate('basic', { session: false }), userController.getUsers);
-
-api.route('/users/:user_id')
+    .get(passport.authenticate('basic', { session: false }), userController.getUsers)
     .put(passport.authenticate('basic', { session: false }), userController.putUser)
     .delete(passport.authenticate('basic-admin', { session: false }), userController.deleteUser);
+
 
 module.exports = api;
