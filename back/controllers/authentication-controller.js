@@ -1,7 +1,11 @@
+var jwt = require('jwt-simple');
+var authConfig = require('../config/auth');
 var User = require('../datasets/user');
 
 var LocalStrategy = require('passport-local').Strategy;
 var BasicStrategy = require('passport-http').BasicStrategy;
+var JwtStrategy = require('passport-jwt').Strategy,
+    ExtractJwt = require('passport-jwt').ExtractJwt;
 
 module.exports = function(passport) {
 
@@ -35,7 +39,7 @@ module.exports = function(passport) {
 
                 // if no user is found, return the message
                 if (!user)
-                    return done(null, false, req.flash('message', 'No user found.'));
+                    return done(null, false);
 
                 // Verify if the password is correct
                 user.comparePassword(password, function (err, isMatch) {
@@ -44,7 +48,7 @@ module.exports = function(passport) {
                     }
                     // Password did not match
                     if (!isMatch) {
-                        return done(null, false, req.flash('message', 'Oops! Wrong password.'));
+                        return done(null, false);
                     }
                     // return user
                     return done(null, user);
@@ -72,7 +76,7 @@ module.exports = function(passport) {
 
                     // check to see if theres already a user with that email
                     if (user) {
-                        return done(null, false, req.flash('message', 'That username is already taken.'));
+                        return done(null, false);
                     } else {
 
                         // create the user
@@ -141,11 +145,27 @@ module.exports = function(passport) {
         }
     ));
 
-    // Define a middleware function to be used for every secured routes
-    exports.auth = function ensureAuthenticated(req, res, next){
-        if (!req.isAuthenticated())
-            res.send(401);
-        else
-            next();
-    };
+    // Jwt strategy
+    var opts = {};
+    opts.jwtFromRequest = ExtractJwt.fromBodyField('token');
+    opts.secretOrKey = authConfig.secret;
+
+    passport.use('jwt', new JwtStrategy(opts, function(jwt_payload, done) {
+        User.findOne({ username: jwt_payload.sub }, function(err, user) {
+            if (err) return done(err, false);
+
+            if (!user) return done(null, false);
+
+            return done(null, user);
+        })
+    }));
+
+};
+
+// Define a middleware function to be used for every secured routes
+exports.ensureAuthed = function ensureAuthenticated(req, res, next){
+    if (!req.isAuthenticated())
+        res.send(401);
+    else
+        next();
 };

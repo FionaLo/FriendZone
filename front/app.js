@@ -1,5 +1,5 @@
 (function(){
-    angular.module('FriendZone', ['ui.router', 'ui.bootstrap'])
+    angular.module('FriendZone', ['ui.router', 'ui.bootstrap', 'ngFlash'])
         .config(function($stateProvider, $urlRouterProvider){
             $urlRouterProvider.otherwise('/landing');
             $stateProvider.state('landing', {

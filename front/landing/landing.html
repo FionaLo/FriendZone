@@ -2,9 +2,10 @@
     <div class="row login-wrapper">
         <h1 class="landing-title">FriendZone</h1>
         <button class="btn btn-primary" id="find-btn" ng-click="onClickFind()">Find Friends</button>
+        <flash-message duration="5000" show-close="true" on-dismiss="myCallback(flash);"></flash-message>
         <div class="login-form" id="login-form">
-            <input type="text" class="form-control" name="username" placeholder="Username" ng-model="user.username"><br/>
-            <input type="password" class="form-control" name="password" placeholder="Password" ng-model="user.password"><br/>
+            <input type="text" class="form-control" placeholder="Username" ng-model="user.username" name="username"><br/>
+            <input type="password" class="form-control" placeholder="Password" ng-model="user.password" name="password"><br/>
             <button class="btn btn-primary" ng-click="login()">Login</button><br/>
             <div class="btn-group social-login" role="group">
                 <button type="button" class="btn btn-default"><i class="fa fa-google"></i></button>

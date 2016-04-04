@@ -2,10 +2,13 @@ var express = require('express');
 var api = express.Router();
 
 var passport = require('passport');
-var authenticationController = require('../controllers/authentication-controller')(passport);
+require('../controllers/authentication-controller')(passport);
+var jwt = require('jwt-simple');
+var authConfig = require('../config/auth');
 
 var eventController = require('../controllers/event-controller');
 var userController = require('../controllers/user-controller');
+
 
 api.get('/', function(req, res) {
     res.json({ message: 'welcome to friendzone api!' });
@@ -22,9 +25,22 @@ api.route('/events/:event_id')
 
 api.route('/users')
     .post(userController.createUsers)
-    .get(passport.authenticate('basic', { session: false }), userController.getUsers)
+    .get(passport.authenticate('jwt', {session: false}), userController.getUsers)
     .put(passport.authenticate('basic', { session: false }), userController.putUser)
     .delete(passport.authenticate('basic-admin', { session: false }), userController.deleteUser);
 
+api.post('/login',
+    passport.authenticate('local-login', {session: false }), function(req,res){
+        var token = jwt.encode({ username: req.user.username }, authConfig.secret);
+        res.json({
+            user: req.user,
+            token: token
+        });
+    });
+
+api.post('/signup',
+    passport.authenticate('local-register'), function(req,res){
+        res.json(req.user)
+    });
 
 module.exports = api;

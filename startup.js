@@ -1,11 +1,15 @@
 var express = require('express');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
 var path = require('path');
 var session = require('express-session');
+var MongoStore = require('connect-mongo')(session);
 var logger = require('morgan');
 var http = require('http');
 var debug = require('debug')('friendzone:server');
+
+var jwt = require('jwt-simple');
 
 // connect to MongoDb database
 mongoose.connect('mongodb://admin:admin@ds023118.mlab.com:23118/friendzone', function(err) {
@@ -20,31 +24,33 @@ var dev = require('./back/routes/dev');
 var app = express();
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use("/public", express.static(__dirname + "/public"));
-app.use("/front", express.static(__dirname + "/front"));
-app.use("/node_modules", express.static(__dirname + "/node_modules"));
-
-app.get("/", function(req, res){
-   res.sendFile(__dirname + '/index.html');
-});
-
-app.use('/api', api);
+app.use(cookieParser());
+app.use(session({
+    cookie: { maxAge: 60000 },
+    secret: 'iamlonely',
+    resave: true,
+    saveUninitialized: true,
+    // store: new MongoStore({
+    //     mongooseConnection: mongoose.connection,
+    //     autoRemove: 'interval',
+    //     autoRemoveInterval: 10
+    // })
+}));
 
 var passport = require('passport');
 app.use(passport.initialize());
 app.use(passport.session());
 
-require('./back/controllers/authentication-controller.js')(passport);
-app.post('/user/login',
-    passport.authenticate('local-login'), function(req,res){
-        res.json(req.user)
-    });
+app.use("/public", express.static(__dirname + "/public"));
+app.use("/front", express.static(__dirname + "/front"));
+app.use("/node_modules", express.static(__dirname + "/node_modules"));
 
-app.post('/user/signup', 
-    passport.authenticate('local-signup'), function(req,res){
-        res.json(req.user)
-    });
+app.get("/", function(req, res){
+    console.log('Cookies: ', req.cookies);
+    res.sendFile(__dirname + '/index.html');
+});
 
+app.use('/api', api);
 app.use('/dev', dev);
 
 // catch 404 and forward to error handler
