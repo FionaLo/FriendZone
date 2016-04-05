@@ -51,20 +51,31 @@ api.post('/login',
         // res.set('Authorization', token);
         
         res.json({
-            // user: req.user,
+            user: req.user,
             token: token
         });
     });
 
-// api.post('/login',
-//     passport.authenticate('bearer', { session: false }), function(req, res) {
-//         res.json(req.user);
-//     }
-// );
-
 api.post('/signup',
     passport.authenticate('local-register'), function(req,res){
-        res.json(req.user)
+        var token = jwt.sign({ username: req.user.username }, secret, { subject: 'user' });
+
+        Token.findOne({ value: token }, function(err, token) {
+            if (!token) {
+                var newToken = new Token({
+                    value: token
+                });
+                console.log(newToken);
+                newToken.save();
+            }
+        });
+
+        // res.set('Authorization', token);
+
+        res.json({
+            user: req.user,
+            token: token
+        });
     });
 
 module.exports = api;
