@@ -46,6 +46,9 @@ function statusChangeCallback(response) {
 // code below.
 function checkLoginState() {
     FB.getLoginStatus(function(response) {
+        if (response.status === 'connected') {
+            var accessToken = response.authResponse.accessToken;
+        } 
         statusChangeCallback(response);
     });
 }
