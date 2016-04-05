@@ -59,7 +59,7 @@
                                 params: {
                                     user_id: item._id
                                 }
-                            }).success(function (res){
+                            }).success(function (){
                                 $scope.init();
                             }).error( function (err){
                                 console.log(err);
@@ -81,9 +81,8 @@
                         }
                     }
                 });
-
                 modalInstance.result.then(function (user) {
-                    $http.put('api/users', user).success(function (res) {
+                    $http.put('api/users', user).success(function () {
                         $scope.init();
                     });
                 }, function () {
@@ -114,7 +113,7 @@
                 modalInstance.result.then(function () {
                     user.reported = false;
                     user.reported_text = "";
-                    $http.put('api/users', user).success(function (res) {
+                    $http.put('api/users', user).success(function () {
                         $scope.init();
                     });
                 }, function () {

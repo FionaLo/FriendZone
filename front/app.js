@@ -20,15 +20,15 @@
                 controller: 'AdminController'
             });
         });
-        angular.module('FriendZone').factory('data-bus', function () {
-            var data = {};
+        angular.module('FriendZone').factory('dataBus', function () {
+            var data = null;
             return {
-                set: function(data){
-                    data = data;
+                set: function(val){
+                    data = val;
                 },
                 get: function(){
                     var temp = data;
-                    data = {};
+                    data = null;
                     return temp;
                 }
             }
@@ -58,18 +58,14 @@
                     return current != null;
                 },
                 getCurrent: function(callback){
-                    if (current != null){
+                    $http.get('api/users/current').success(function(res){
+                        current = res;
                         callback(current);
-                    } else {
-                        $http.get('api/users/current').success(function(res){
-                            current = res;
-                            callback(current);
-                        }).error(function(err){
-                            console.log(err);
-                            current = null;
-                            callback(current);
-                        });
-                    }
+                    }).error(function(err){
+                        console.log(err);
+                        current = null;
+                        callback(current);
+                    });
                 }
             }
         }]);
