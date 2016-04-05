@@ -1,0 +1,30 @@
+<div class="modal-header">
+    <h3 class="modal-title">{{title}}</h3>
+</div>
+<div class="modal-body">
+    <label for="name">Name: </label>
+    <input type="text" class="form-control" ng-model="modal.event.name" id="name"><br/>
+    <label for="subtitle">Sub-title: </label>
+    <input type="text" class="form-control" ng-model="modal.event.subtitle" id="subtitle"><br/>
+    <label for="location">Location: </label>
+    <input type="text" class="form-control" ng-model="modal.event.location" id="location"><br/>
+    <label for="date">Date: </label>
+    <p class="input-group" id="date">
+        <input type="text" class="form-control" uib-datepicker-popup="{{dateFormat}}" ng-model="modal.event.date"
+               is-open="datePopup.opened" datepicker-options="dateOptions"
+               close-text="Close" alt-input-formats="altInputFormats" readonly="readonly"/>
+            <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="openDatePopup()">
+                    <i class="glyphicon glyphicon-calendar"></i>
+                </button>
+            </span>
+    </p>
+    <label>Time: </label>
+    <uib-timepicker ng-model="modal.event.time" hour-step="1" minute-step="15" id="time"></uib-timepicker>
+    <label for="description">Description: </label>
+    <textarea class="form-control" rows="5" id="description" ng-model="modal.event.description"></textarea>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-warning" type="button" ng-click="create();">Create</button>
+    <button class="btn btn-warning" type="button" ng-click="cancel();">Cancel</button>
+</div>

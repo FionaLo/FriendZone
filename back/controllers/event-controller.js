@@ -7,20 +7,14 @@ var Event = require('../datasets/event');
 // Create endpoint /api/events for POSTS
 exports.postEvents = function(req, res) {
     // Create a new instance of the Event model
-    var event = new Event({
-        name: req.body.name,
-        date: req.body.date,
-        description: req.body.description
-    });
+    var event = new Event(req.body);
 
-    event.save(function(err) {
-        if (err)
+    event.save(function(err, event) {
+        if (err){
             res.send(err);
-
-        res.json({
-            message: 'event created',
-            data: event
-        });
+        } else {
+            res.json(event);
+        }
     });
 
 };
@@ -30,6 +24,15 @@ exports.getEvents = function(req, res) {
     // Use the event model to find all event
     Event.find(req['query'], function(err, events) {
         if (err) {
+            res.send(err);
+        } else {
+            res.json(events);
+        }
+    });
+};
+exports.getEventsMany = function(req, res) {
+    Event.find({'_id': { $in: req['query'].ids}}, function (err, events) {
+        if (err){
             res.send(err);
         } else {
             res.json(events);

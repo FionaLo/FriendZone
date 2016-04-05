@@ -1,6 +1,6 @@
 (function () {
-    angular.module('FriendZone').controller('SearchController', ['$scope', '$state', '$http', '$uibModal', 'auth',
-        function ($scope, $state, $http, $uibModal, auth) {
+    angular.module('FriendZone').controller('SearchController', ['$scope', '$state', '$http', '$uibModal', 'auth', 'dataBus',
+        function ($scope, $state, $http, $uibModal, auth, dataBus) {
 
             $scope.init = function () {
                 $scope.filteredUsers = [];
@@ -29,12 +29,23 @@
             $scope.openNewEvent = function () {
                 var modalInstance = $uibModal.open({
                     templateUrl: 'new-event-modal',
-                    controller: 'NewEventModalController'
+                    controller: 'EventModalController',
+                    resolve: {
+                        event: function () {
+                            return null;
+                        }
+                    }
                 });
 
                 modalInstance.result.then(function (event) {
+                    event.creator = $scope.current._id;
+                    event.attendees = [$scope.current._id];
                     $http.post('api/events', event).success(function (res) {
-                        console.log(res);
+                        $scope.current.events.push(res._id);
+                        $scope.current.attend_events.push(res._id);
+                        $http.put('api/users', $scope.current).error(function (err){
+                            console.log(err);
+                        });
                     }).error(function (err) {
                         console.log(err);
                     });
@@ -50,29 +61,16 @@
                 $scope.filteredUsers = $scope.users.slice(start, end);
             };
 
+            $scope.gotoUser = function(user){
+                dataBus.set(user);
+                $state.go('profile');
+            };
+
             $scope.init();
         }]);
     angular.module('FriendZone').controller('NewEventModalController', ['$scope', '$state', '$http', '$uibModalInstance',
         function($scope, $state, $http, $uibModalInstance){
-            $scope.dateFormat = 'dd-MMMM-yyyy';
-            $scope.dateOptions = {
-                formatYear: 'yy',
-                maxDate: new Date(2020, 5, 22),
-                minDate: new Date(),
-                startingDay: 1
-            };
-            $scope.datePopup = {
-                opened: false
-            };
-            $scope.openDatePopup = function() {
-                $scope.datePopup.opened = true;
-            };
-            $scope.create = function () {
-                $uibModalInstance.close($scope.event);
-            };
-            $scope.cancel = function () {
-                $uibModalInstance.dismiss('cancel');
-            };
+
         }]);
 }());
 

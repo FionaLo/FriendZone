@@ -28,7 +28,7 @@ var UserSchema = new Schema({
     rating_total: Number,
     rating_count: Number,
     events: [],
-    attended_events: []
+    attend_events: []
 });
 
 UserSchema.pre('save', function(next) {

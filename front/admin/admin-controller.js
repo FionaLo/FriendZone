@@ -1,6 +1,6 @@
 (function () {
-    angular.module('FriendZone').controller('AdminController', ['$scope', '$state', '$http', '$uibModal',
-        function ($scope, $state, $http, $uibModal) {
+    angular.module('FriendZone').controller('AdminController', ['$scope', '$state', '$http', '$uibModal', 'dataBus',
+        function ($scope, $state, $http, $uibModal, dataBus) {
             $scope.init = function() {
                 $scope.filteredUsers = [];
                 $scope.filteredEvents = [];
@@ -74,7 +74,7 @@
             $scope.openEditUser = function (user){
                 var modalInstance = $uibModal.open({
                     templateUrl: 'edit-user-modal',
-                    controller: 'EditUserModalController',
+                    controller: 'UserModalController',
                     resolve: {
                         user: function () {
                             return user;
@@ -91,11 +91,15 @@
             $scope.openEditEvent = function (event) {
                 var modalInstance = $uibModal.open({
                     templateUrl: 'edit-event-modal',
-                    controller: 'EditEventModalController'
+                    controller: 'EventModalController',
+                    resolve: {
+                        event: function () {
+                            return event;
+                        }
+                    }
                 });
 
                 modalInstance.result.then(function () {
-                    console.log('confirm');
                 }, function () {
                 });
             };
@@ -118,6 +122,15 @@
                     });
                 }, function () {
                 });
+            };
+
+            $scope.gotoUser = function (user){
+                dataBus.set(user);
+                $state.go('profile');
+            };
+            $scope.gotoEvent = function (event){
+                dataBus.set(event);
+                $state.go('event');
             };
 
             $scope.userPageChanged = function (current) {
@@ -145,31 +158,6 @@
         }]);
     angular.module('FriendZone').controller('ConfirmModalController', ['$scope', '$state', '$http', '$uibModalInstance',
         function ($scope, $state, $http, $uibModalInstance) {
-            $scope.confirm = function () {
-                $uibModalInstance.close('confirm');
-            };
-
-            $scope.cancel = function () {
-                $uibModalInstance.dismiss('cancel');
-            };
-        }]);
-    angular.module('FriendZone').controller('EditUserModalController', ['$scope', '$state', '$http', '$uibModalInstance', 'user',
-        function ($scope, $state, $http, $uibModalInstance, user) {
-            $scope.user = user;
-            $scope.newPassword = '';
-            $scope.confirm = function () {
-                if ($scope.newPassword !== ''){
-                    $scope.user.password = $scope.newPassword;
-                }
-                $uibModalInstance.close($scope.user);
-            };
-
-            $scope.cancel = function () {
-                $uibModalInstance.dismiss('cancel');
-            };
-        }]);
-    angular.module('FriendZone').controller('EditEventModalController', ['$scope', '$state', '$http', '$uibModalInstance', 'event',
-        function ($scope, $state, $http, $uibModalInstance, event) {
             $scope.confirm = function () {
                 $uibModalInstance.close('confirm');
             };

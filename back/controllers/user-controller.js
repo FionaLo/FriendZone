@@ -32,6 +32,16 @@ exports.getUsers = function (req, res) {
     });
 };
 
+exports.getUsersMany = function (req, res){
+    User.find({'_id': { $in: req['query']}}, function (err, users) {
+        if (err){
+            res.error(err);
+        } else {
+            res.json(users);
+        }
+    });
+};
+
 // exports.getUsers2 = function(req, res) {
 //     var token = req.body.token || req.query.token || req.headers['x-access-token'];
 //     if (token) {
@@ -67,8 +77,15 @@ exports.putUser = function (req, res) {
         user.password = req.body.password;
 
         user.email = req.body.email;
+        user.location = req.body.location;
+        user.description = req.body.description;
+
         user.reported = req.body.reported;
         user.reported_text = req.body.reported_text;
+        user.rating_total = req.body.rating_total;
+        user.rating_count = req.body.rating_count;
+        user.events = req.body.events;
+        user.attend_events = req.body.attend_events;
 
         // Save the event and check for errors
         user.save(function (err) {

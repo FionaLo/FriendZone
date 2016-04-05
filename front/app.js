@@ -14,6 +14,10 @@
                 url: '/profile',
                 templateUrl: 'front/profile/profile.html',
                 controller: 'ProfileController'
+            }).state('event', {
+                url: '/event',
+                templateUrl: 'front/event/event.html',
+                controller: 'EventController'
             }).state('admin', {
                 url: '/admin',
                 templateUrl: 'front/admin/admin.html',

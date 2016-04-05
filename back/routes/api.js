@@ -22,6 +22,8 @@ api.route('/events')
     .get(passport.authenticate(['jwt', 'basic'], { session: false }), eventController.getEvents)
     .put(passport.authenticate(['jwt', 'basic'], { session: false }), eventController.putEvent)
     .delete(passport.authenticate(['jwt', 'basic'], { session: false }), eventController.deleteEvent);
+api.route('/events/many')
+    .get(passport.authenticate(['jwt', 'basic'], { session: false }), eventController.getEventsMany);
 
 api.route('/users')
     .post(userController.createUsers)
