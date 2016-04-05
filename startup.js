@@ -9,8 +9,6 @@ var logger = require('morgan');
 var http = require('http');
 var debug = require('debug')('friendzone:server');
 
-var jwt = require('jwt-simple');
-
 // connect to MongoDb database
 mongoose.connect('mongodb://admin:admin@ds023118.mlab.com:23118/friendzone', function(err) {
     if (err) throw err;
