@@ -3,8 +3,6 @@
  */
 
 var User = require('../datasets/user');
-var jwt = require('jwt-simple');
-var authConfig = require('../config/auth');
 
 // Create endpoint /api/user for POST
 exports.createUsers = function (req, res) {

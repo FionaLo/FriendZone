@@ -38,7 +38,7 @@ api.post('/login',
 
         Token.findOne({ value: token }, function(err, token) {
             if (!token) {
-                newToken = new Token({
+                var newToken = new Token({
                     value: token
                 });
                 console.log(newToken);
