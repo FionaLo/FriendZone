@@ -20,10 +20,15 @@ var UserSchema = new Schema({
         required: true
     },
     email: String,
+    location: String,
     description: String,
     profile_image: String,
     reported: Boolean,
-    reported_text: String
+    reported_text: String,
+    rating_total: Number,
+    rating_count: Number,
+    events: [],
+    attended_events: []
 });
 
 UserSchema.pre('save', function(next) {

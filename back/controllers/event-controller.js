@@ -28,10 +28,12 @@ exports.postEvents = function(req, res) {
 // Create endpoint /api/events for GET
 exports.getEvents = function(req, res) {
     // Use the event model to find all event
-    Event.find(function(err, events) {
-        if (err) res.send(err);
-
-        res.json(events);
+    Event.find(req['query'], function(err, events) {
+        if (err) {
+            res.send(err);
+        } else {
+            res.json(events);
+        }
     });
 };
 

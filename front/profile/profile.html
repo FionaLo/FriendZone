@@ -1,211 +1,105 @@
 <nav class="navbar navbar-default navbar-fixed-top" ng-include src="'front/navigation/navigation.html'" ng-controller="NavigationController"></nav>
-<div class="container">
+<div class="container body">
     <div class="row">
         <div class="col-sm-10">
-            <h1>Dave</h1>
+            <h1>{{user.username}}</h1>
             <br>
-            <p>My name is Dave.</p>
-            <p>Welcome to my profile.</p>
+            <p>{{user.description}}</p>
         </div>
         <div class="col-sm-2">
             <a href="/users" class="pull-right">
-                <img title="profile image" class="img-circle img-responsive" src="/images/kyoto.jpg">
+                <img title="profile image" class="img-circle img-responsive" src="public/images/kyoto.jpg">
             </a>
         </div>
     </div>
     <hr>
     <div class="row">
         <div class="col-md-3">
-            <ul class="list-group">
+            <ul class="list-group clearfix">
                 <li class="list-group-item text-muted">Profile</li>
-                <li class="list-group-item text-right"><span class="pull-left"><strong>Username</strong></span>dave123
+                <li class="list-group-item text-right">
+                    <span class="pull-left"><strong>Username</strong></span> {{user.username}}&nbsp;
                 </li>
-                <li class="list-group-item text-right"><span class="pull-left"><strong>E-mail</strong></span>me@da.ve
+                <li class="list-group-item text-right">
+                    <span class="pull-left"><strong>E-mail</strong></span>{{user.email}}&nbsp;
                 </li>
-                <li class="list-group-item text-right"><span class="pull-left"><strong>Location</strong></span>Dallas,
-                    TX
+                <li class="list-group-item text-right">
+                    <span class="pull-left"><strong>Location</strong></span>{{user.location}}&nbsp;
                 </li>
                 <li class="list-group-item text-right">
                     <!-- Button trigger modal -->
-                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#editProfile">
+                    <button type="button" class="btn btn-default" ng-click="openEditProfile();">
                         Edit
                     </button>
-                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#friend-modal">
-                        Add Friend
-                    </button>
-                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#report-modal">
+                    <button type="button" class="btn btn-danger" ng-click="openReportModal();">
                         Report
                     </button>
                 </li>
             </ul>
             <ul class="list-group">
                 <li class="list-group-item text-muted">Activity</li>
-                <li class="list-group-item text-right"><span class="pull-left"><strong>Rating</strong></span>5</li>
-                <li class="list-group-item text-right"><span class="pull-left"><strong>Friends</strong></span>3</li>
-                <li class="list-group-item text-right"><span class="pull-left"><strong>Events attended</strong></span>0
+                <li class="list-group-item text-right"><span class="pull-left">
+                    <strong>Rating</strong></span>{{userRating}}&nbsp;
                 </li>
-                <li class="list-group-item text-right"><span class="pull-left"><strong>Events created</strong></span>1
+                <li class="list-group-item text-right"><span class="pull-left">
+                    <strong>Events attended</strong></span>{{user.attended_events.length}}&nbsp;
+                </li>
+                <li class="list-group-item text-right"><span class="pull-left">
+                    <strong>Events created</strong></span>{{user.events.length}}&nbsp;
                 </li>
             </ul>
         </div>
         <div class="col-md-9">
-            <ul class="nav nav-pills">
-                <li class="active"><a href="#home" data-toggle="tab">Home</a></li>
-                <li><a href="#friends" data-toggle="tab">Friends</a></li>
-                <li><a href="#events" data-toggle="tab">Events</a></li>
-            </ul>
-            <div class="tab-content">
-                <div class="tab-pane active" id="home">
-                    <hr>
-                    <h4>Upcoming Events</h4>
-                    <div class="list-group">
-                        <button type="button" class="list-group-item">
-                            <span class="badge">In 3 days</span>
-                            Dave's Birthday Party
-                        </button>
-                        <button type="button" class="list-group-item">
-                            <span class="badge">In 6 days</span>
-                            Awesome party
-                        </button>
-                    </div>
-                    <hr>
-
-                    <h4>Recent Activity</h4>
+            <uib-tabset active="active">
+                <uib-tab index="1" heading="Upcoming Events">
                     <ul class="list-group">
-                        <li class="list-group-item">Alex invited you to <a href="#">Awesome party</a>!</li>
-                        <li class="list-group-item">You created <a href="#">Dave's Birthday Party</a>.</li>
+                        <li class="list-group-item clearfix" ng-repeat="event in filteredUpcomingEvents">
+                            <a>{{event.name}}</a>
+                        </li>
                     </ul>
-                </div>
-                <div class="tab-pane" id="friends">
-                    <br>
-                    <div class="panel panel-primary">
-                        <div class="list-group">
-                            <button type="button" class="list-group-item">Alex</button>
-                            <button type="button" class="list-group-item">Bob</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="tab-pane" id="events">
-                    <br>
-                    <div class="panel panel-primary">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Events created</h3>
-                        </div>
-                        <div class="list-group">
-                            <a type="button" class="list-group-item" href="/event">Dave's Birthday Party</a>
-                        </div>
-                    </div>
-
-                    <div class="panel panel-primary">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Events invited to</h3>
-                        </div>
-                        <div class="list-group">
-                            <a type="button" class="list-group-item" href="/event">Awesome party</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                    <uib-pagination total-items="upcomingEvents.length" ng-model="currentUpcomingPage" ng-change="upcomingPageChanged(currentUpcomingPage)"></uib-pagination>
+                </uib-tab>
+                <uib-tab index="2" heading="Past Events">
+                    <ul class="list-group">
+                        <li class="list-group-item clearfix" ng-repeat="event in filteredPastEvents">
+                            <a>{{event.name}}</a>
+                        </li>
+                    </ul>
+                    <uib-pagination total-items="pastEvents.length" ng-model="currentPastPage" ng-change="pastPageChanged(currentPastPage)"></uib-pagination>
+                </uib-tab>
+            </uib-tabset>
         </div>
     </div>
 </div>
-<div id="friend-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-body">
-                <h4>Send Friend Request</h4>
-                <label for="message">Message:</label>
-                <textarea class="form-control" rows="5" id="message"></textarea>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-success" data-dismiss="modal">Send</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            </div>
-        </div>
+<script type="text/ng-template" id="report-modal">
+    <div class="modal-header">
+        <h3 class="modal-title">Report User</h3>
     </div>
-</div>
-<div id="report-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-body">
-                <label for="report">Report:</label>
-                <textarea class="form-control" rows="5" id="report"></textarea>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-success" data-dismiss="modal">Send</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            </div>
-        </div>
+    <div class="modal-body">
+        <label for="report">Reason:</label>
+        <textarea class="form-control" rows="5" id="report" ng-model="reportText"></textarea>
     </div>
-</div>
-<div class="modal fade" id="editProfile" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="gridSystemModalLabel">Edit profile</h4>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <!-- personal info -->
-                    <div class="col-md-8 col-sm-6 col-xs-12 personal-info">
-                        <h3>Personal info</h3>
-                        <form class="form-horizontal" role="form">
-                            <div class="form-group">
-                                <label class="col-lg-3 control-label">First name:</label>
-                                <div class="col-lg-8">
-                                    <input class="form-control" type="text">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-lg-3 control-label">Last name:</label>
-                                <div class="col-lg-8">
-                                    <input class="form-control" type="text">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-lg-3 control-label">Email:</label>
-                                <div class="col-lg-8">
-                                    <input class="form-control" type="text">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 control-label">Username:</label>
-                                <div class="col-md-8">
-                                    <input class="form-control" type="text">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 control-label">Password:</label>
-                                <div class="col-md-8">
-                                    <input class="form-control" type="password">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 control-label">Confirm password:</label>
-                                <div class="col-md-8">
-                                    <input class="form-control" type="password">
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <!-- profile picture -->
-                    <div class="col-md-4 col-sm-6 col-xs-12">
-                        <h3>Profile picture</h3>
-                        <div class="text-center">
-                            <img src="/images/kyoto.jpg" class="avatar img-circle img-thumbnail" alt="avatar">
-                            <h6>Upload a photo</h6>
-                            <input type="file" class="text-center center-block well well-sm">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
-        </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="button" ng-click="report();">Report</button>
+        <button class="btn btn-warning" type="button" ng-click="cancel();">Cancel</button>
     </div>
-</div>
+</script>
+<script type="text/ng-template" id="edit-profile-modal">
+    <div class="modal-header">
+        <h3 class="modal-title">Edit Profile</h3>
+    </div>
+    <div class="modal-body">
+        <label for="username">Username: </label>
+        <input type="text" class="form-control" ng-model="user.username" id="username"><br/>
+        <label for="email">Email: </label>
+        <input type="email" class="form-control" ng-model="user.email" id="email"><br/>
+        <label for="location">Location: </label>
+        <input type="text" class="form-control" ng-model="user.location" id="location"><br/>
+        <label for="description">Description: </label>
+        <textarea class="form-control" rows="5" ng-model="user.description" id="description"></textarea>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="button" ng-click="confirm();">Confirm</button>
+        <button class="btn btn-warning" type="button" ng-click="cancel();">Cancel</button>
+    </div>
+</script>
