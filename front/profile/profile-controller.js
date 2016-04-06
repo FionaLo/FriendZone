@@ -15,6 +15,8 @@
                 $scope.invites = [];
                 $scope.filteredInvites = [];
 
+                $scope.suggests = [];
+
                 var val = dataBus.get();
                 auth.getCurrent(function(user){
                     $scope.current = user;
@@ -61,6 +63,16 @@
                         }
                         $scope.upcomingPageChanged(1);
                         $scope.pastPageChanged(1);
+                    });
+                }
+                if ($scope.current.location !== '' &&
+                    $scope.current.location  !== 'undef'){
+                    $http.get('api/events', {
+                       params: {
+                            location: $scope.current.location
+                       }
+                    }).success(function(res){
+                        $scope.suggests = res.slice(0, 5);
                     });
                 }
             };

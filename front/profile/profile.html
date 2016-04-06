@@ -73,7 +73,7 @@
             </uib-tabset>
         </div>
     </div>
-    <div class="row">
+    <div class="row" ng-show="self">
         <div class="col-sm-12 col-md-6">
             <div class="panel panel-default text-center">
                 <div class="panel-heading">
@@ -86,6 +86,20 @@
                         </li>
                     </ul>
                     <uib-pagination total-items="invites.length" ng-model="currentInvitePage" ng-change="invitePageChanged(currentInvitePage)"></uib-pagination>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <div class="panel panel-default text-center">
+                <div class="panel-heading">
+                    <h3>Recommended</h3>
+                </div>
+                <div class="panel-body">
+                    <ul class="list-group">
+                        <li class="list-group-item" ng-repeat="suggest in suggests">
+                            <a ng-click="gotoEvent(suggest)">{{suggest.name}}</a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>

@@ -13,11 +13,12 @@ exports.createUsers = function (req, res) {
         password: req.body.password,
         group: req.body.group
     });
-
     user.save(function (err) {
-        if (err) res.send(err);
-
-        res.json({message: 'new user created'});
+        if (err) {
+            res.send(err);
+        } else {
+            res.json({message: 'new user created'});
+        }
     });
 };
 
