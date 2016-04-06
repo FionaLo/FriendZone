@@ -41,6 +41,7 @@
                     event.creator = $scope.current._id;
                     event.attendees = [$scope.current._id];
                     $http.post('api/events', event).success(function (res) {
+                        console.log(res);
                         $scope.current.events.push(res._id);
                         $scope.current.attend_events.push(res._id);
                         $http.put('api/users', $scope.current).error(function (err){
@@ -67,10 +68,6 @@
             };
 
             $scope.init();
-        }]);
-    angular.module('FriendZone').controller('NewEventModalController', ['$scope', '$state', '$http', '$uibModalInstance',
-        function($scope, $state, $http, $uibModalInstance){
-
         }]);
 }());
 

@@ -30,7 +30,10 @@ api.route('/users')
     .get(passport.authenticate(['jwt', 'basic'], { session: false }), userController.getUsers)
     .put(passport.authenticate(['jwt', 'basic'], { session: false }), userController.putUser)
     .delete(passport.authenticate(['jwt', 'basic-admin'], { session: false }), userController.deleteUser);
-
+api.route('/users/single')
+    .get(passport.authenticate(['jwt', 'basic'], { session: false }), userController.getUserSingle);
+api.route('/users/many')
+    .get(passport.authenticate(['jwt', 'basic'], { session: false }), userController.getUsersMany);
 api.route('/users/current')
     .get(passport.authenticate(['jwt', 'basic'], { session: false }), userController.getCurrentUser);
 

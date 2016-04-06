@@ -33,7 +33,6 @@
                             ids: eventIds
                         }
                     }).success(function(res){
-                        console.log(res);
                         $scope.upcomingEvents = res;
                         $scope.pastEvents = res;
                         $scope.upcomingPageChanged(1);

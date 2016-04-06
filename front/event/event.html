@@ -4,8 +4,9 @@
         <h1>{{event.name}}</h1>
         <p class="lead">{{event.subtitle}}</p>
         <p id="btn-join">
-            <button class="btn btn-lg btn-default" data-toggle="modal" data-target="#edit-modal">Edit</button>
-            <button class="btn btn-lg btn-success join" href="#" role="button">Join</button>
+            <button class="btn btn-lg btn-default" ng-click="openEditEventModal();">Edit</button>
+            <button class="btn btn-lg btn-success join" ng-click="attend();">Join</button>
+            <button class="btn btn-lg btn-info" ng-click="unattend();">Un-Join</button>
         </p>
     </div>
 
@@ -16,10 +17,10 @@
                     <h1>Details</h1>
                 </div>
                 <div class="panel-body">
-                    <p><strong>Date: </strong>{{event.date}}</p>
-                    <p><strong>Time: </strong>{{event.time}}</p>
+                    <p><strong>Date: </strong>{{event.date | date:'fullDate'}}</p>
+                    <p><strong>Time: </strong>{{event.time | date:'shortTime'}}</p>
                     <p><strong>Location: </strong>{{event.location}}</p>
-                    <p><strong>Created by: </strong>{{event.creator}}</p>
+                    <p><strong>Created by: </strong>{{creator}}</p>
                 </div>
             </div>
         </div>
@@ -40,87 +41,14 @@
                 </div>
                 <div class="panel-body">
                     <ul class="list-group">
-                        <li class="list-group-item"></li>
+                        <li class="list-group-item" ng-repeat="user in filteredAttendees">{{user.username}}</li>
                     </ul>
+                    <uib-pagination total-items="event.attendees.length" ng-model="currentAttendPage" ng-change="attendPageChanged(currentAttendPage)"></uib-pagination>
                 </div>
-            </div>
-        </div>
-    </div>
-</div> <!-- /container -->
-
-<!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Invite friends</h4>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-8">
-                        <p>Alex</p>
-                    </div>
-                    <div class="col-md-4">
-                        <p class="btn-invite">
-                            <button type="button" class="btn btn-default btn-invite">Invite</button>
-                        </p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-8">
-                        <p>Jennifer</p>
-                    </div>
-                    <div class="col-md-4">
-                        <p class="btn-invite">
-                            <button type="button" class="btn btn-default btn-invite">Invite</button>
-                        </p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-8">
-                        <p>Kelly</p>
-                    </div>
-                    <div class="col-md-4">
-                        <p class="btn-invite">
-                            <button type="button" class="btn btn-default btn-invite">Invite</button>
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div>
-<div id="edit-modal" class="modal fade event-modal" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-body">
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">Name:</span>
-                        <input type="text" class="form-control" placeholder="Awesome thing V12">
-                    </div>
-                    <div class="input-group">
-                        <span class="input-group-addon">Time:</span>
-                        <input type="text" class="form-control" placeholder="June 24, 2014 12:00AM">
-                    </div>
-                    <div class="input-group">
-                        <span class="input-group-addon">Location:</span>
-                        <input type="text" class="form-control" placeholder="Empire State Building">
-                    </div>
-                    <br/>
-                    <label for="description">Description:</label>
-                    <textarea class="form-control" rows="5" id="description"></textarea>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Create</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            </div>
-        </div>
-    </div>
-</div>
+<script type="text/ng-template" id="edit-event-modal">
+    <div ng-include src="'front/event/event-modal.html'"/>
+</script>

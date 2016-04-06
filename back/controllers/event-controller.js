@@ -53,23 +53,28 @@ exports.getEvent = function(req, res) {
 // Create endpoint /api/events/:event_id for PUT
 exports.putEvent = function(req, res) {
     // Use the Event model to find a specific event
-    Event.findById(req.params.event_id, function(err, event) {
-        if (err)
+    Event.findById(req.body._id, function(err, eventData) {
+        if (err) {
             res.send(err);
+        } else {
+            var event = eventData;
+            // Update the existing event name
+            event.name = req.body.name;
+            event.subtitle = req.body.subtitle;
+            event.description = req.body.description;
+            event.location = req.body.location;
+            event.date = req.body.date;
+            event.time = req.body.time;
+            event.attendees = req.body.attendees;
 
-        // Update the existing event name
-        event.name = req.body.name;
+            // Save the event and check for errors
+            event.save(function(err) {
+                if (err)
+                    res.send(err);
 
-        // Update the existing event description
-        event.description = req.body.description;
-
-        // Save the event and check for errors
-        event.save(function(err) {
-            if (err)
-                res.send(err);
-
-            res.json(event);
-        });
+                res.json(event);
+            });
+        }
     });
 };
 
