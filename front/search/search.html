@@ -16,54 +16,28 @@
             <h3>Search for New Friends!</h3>
             <ul class="list-group search-list-group">
                 <li class="list-group-item">
-                    <div class="input-group">
-                        <span class="input-group-addon">Search:</span>
-                        <input type="text" class="form-control" placeholder="Hello, Is it me you're looking for?">
-                    </div>
+                    <label for="username">Search: </label>
+                    <input type="text" class="form-control" placeholder="Hello, Is it me you're looking for?"
+                        ng-model="nameSearch" id="username" ng-change="updateUserList();">
                 </li>
                 <li class="list-group-item">
-                    <div class="dropdown">
-                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                            Show Me:
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                            <li><a href="#">Only Men</a></li>
-                            <li><a href="#">Only Women</a></li>
-                            <li><a href="#">It Doesn't Matter</a></li>
-                        </ul>
-                    </div>
+                    <label for="location">Location: </label>
+                    <input type="text" class="form-control" placeholder="Toronto, ON"
+                           ng-model="locationSearch" id="location" ng-change="updateUserList();">
                 </li>
                 <li class="list-group-item">
-                    <p>hello</p>
-                    <!--<label class="control-label col-xs-2">Ages:</label>-->
-                    <!--<select class="selectpicker col-xs-10">-->
-                        <!--<option value="young">18-20</option>-->
-                        <!--<option value="lessYoung">21-30</option>-->
-                        <!--<option value="notYoung">30+</option>-->
-                        <!--<option value="whoCares">It Doesn't Matter</option>-->
-                    <!--</select>-->
+                    <label for="gender">Gender</label>
+                    <select class="form-control" ng-model="genderSearch" ng-options="select for select in genderSelect"
+                        id="gender" ng-change="updateUserList();">
+                        <option></option>
+                    </select>
                 </li>
                 <li class="list-group-item">
-                    <p>hello</p>
-                    <!--<label class="control-label col-xs-2">Within:</label>-->
-                    <!--<select class="selectpicker col-xs-10">-->
-                        <!--<option value="close">10km</option>-->
-                        <!--<option value="lessClose">15km</option>-->
-                        <!--<option value="notReallyClose">20km</option>-->
-                        <!--<option value="far">25km</option>-->
-                        <!--<option value="whoCares">It Doesn't Matter</option>-->
-                    <!--</select>-->
-                </li>
-                <li class="list-group-item">
-                    <p>hello</p>
-                    <!--<label class="control-label col-xs-2">Sort By:</label>-->
-                    <!--<select class="selectpicker col-xs-10">-->
-                        <!--<option value="newest">Newly Arrived</option>-->
-                        <!--<option value="oldestOnSite">Longest time in FriendZone</option>-->
-                        <!--<option value="popular">Highest Rated</option>-->
-                        <!--<option value="sucky">Underdogs</option>-->
-                    <!--</select>-->
+                    <label for="sort">Sort by: </label>
+                    <select class="form-control" ng-model="sortBy" ng-options="select for select in sortSelect"
+                            id="sort" ng-change="updateUserList();">
+                        <option></option>
+                    </select>
                 </li>
             </ul>
         </div>

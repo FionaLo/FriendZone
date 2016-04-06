@@ -11,8 +11,7 @@ exports.createUsers = function (req, res) {
     var user = new User({
         username: req.body.username,
         password: req.body.password,
-        group: req.body.group,
-        rating: 5
+        group: req.body.group
     });
 
     user.save(function (err) {
@@ -24,7 +23,20 @@ exports.createUsers = function (req, res) {
 
 // Create endpoint /api/users for GET
 exports.getUsers = function (req, res) {
-    User.find(req['query'], function (err, users) {
+    console.log(req.query);
+    console.log(JSON.parse(req.query.filter));
+    var query = {};
+    if (JSON.parse(req.query.filter).group !== undefined){
+        query.group = JSON.parse(req.query.filter).group;
+    }
+    if (JSON.parse(req.query.filter).username !== ''){
+        query.username = JSON.parse(req.query.filter).username;
+    }
+    if (JSON.parse(req.query.filter).gender !== ''){
+        query.gender = JSON.parse(req.query.filter).gender;
+    }
+
+    User.find(query).sort(JSON.parse(req.query.sort)).exec(function (err, users) {
         if (err){
             res.error(err);
         } else {
@@ -46,7 +58,6 @@ exports.getUserSingle = function (req, res){
         if (err){
             res.send(err);
         } else {
-            console.log(userData);
             var user = userData;
             res.json(user);
         }
@@ -69,11 +80,11 @@ exports.putUser = function (req, res) {
 
             user.email = req.body.email;
             user.location = req.body.location;
+            user.gender = req.body.gender;
             user.description = req.body.description;
 
             user.reported = req.body.reported;
             user.reported_text = req.body.reported_text;
-            user.rating = req.body.rating;
             user.rating_total = req.body.rating_total;
             user.rating_count = req.body.rating_count;
             user.events = req.body.events;

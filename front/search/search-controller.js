@@ -6,23 +6,64 @@
                 $scope.filteredUsers = [];
                 $scope.currentPage = 1;
                 $scope.pageSize = 10;
+                $scope.nameSearch = "";
+                $scope.locationSearch = "";
+                $scope.genderSelect = ['Male', 'Female', 'doesn\'t matter'];
+                $scope.sortSelect = ['Name', 'Rating', 'Time in FriendZone'];
                 $scope.updateUserList();
                 auth.getCurrent(function(current){
                     $scope.current = current;
                 });
             };
 
+            $scope.onFilterChange = function(){
+                console.log($scope.genderSearch);
+            };
             $scope.updateUserList = function(){
+                var genderFilter = "";
+                if ($scope.genderSearch !== 'doesn\'t matter'){
+                    genderFilter = $scope.genderSearch;
+                }
+                var searchParams = {
+                    group: 'user',
+                    username: $scope.nameSearch,
+                    location: $scope.locationSearch,
+                    gender: genderFilter
+                };
+
+                var sortParams = {};
+                switch ($scope.sortBy){
+                    case 'Name':
+                        sortParams = {
+                            username: 1
+                        };
+                        break;
+                    case 'Rating':
+                        sortParams = {
+                            rating: -1
+                        };
+                        break;
+                    case 'Time in FriendZone':
+                        sortParams = {
+                            _id: -1
+                        };
+                        break;
+                }
+
                 $http.get('api/users', {
                     headers: {
                         'Authorization': 'JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNDU5NzkxNjIwLCJzdWIiOiJ1c2VyIn0.YynGJn_oV41NF7jh3VHTipNRYIxd_Qa8bmqdzQBHkPc'
                     },
                     params: {
-                        group: 'user'
+                        filter: searchParams,
+                        sort: sortParams
                     }
                 }).success(function (res) {
+                    console.log(res);
                     $scope.users = res;
                     $scope.pageChanged(1);
+                }).error(function (err){
+                    console.log(err);
                 });
             };
 

@@ -24,6 +24,7 @@ var UserSchema = new Schema({
     },
     email: String,
     location: String,
+    gender: String,
     description: String,
     profile_image: String,
     reported: Boolean,
@@ -33,6 +34,7 @@ var UserSchema = new Schema({
     rating_count: Number,
     events: [],
     attend_events: [],
+    invites: [],
     facebook: {
         id           : String,
         token        : String,
