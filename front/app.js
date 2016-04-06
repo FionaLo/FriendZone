@@ -1,6 +1,6 @@
 (function(){
     angular.module('FriendZone', ['ui.router', 'ui.bootstrap', 'ngFlash'])
-        .config(function($stateProvider, $urlRouterProvider){
+        .config(function($stateProvider, $urlRouterProvider, $httpProvider){
             $urlRouterProvider.otherwise('/landing');
             $stateProvider.state('landing', {
                 url: '/landing',
@@ -23,6 +23,7 @@
                 templateUrl: 'front/admin/admin.html',
                 controller: 'AdminController'
             });
+            $httpProvider.interceptors.push('authInterceptor');
         });
         angular.module('FriendZone').factory('dataBus', function () {
             var data = null;
@@ -37,13 +38,14 @@
                 }
             }
         });
-    angular.module('FriendZone').factory('auth', ['$http', function ($http) {
+    angular.module('FriendZone').factory('auth', ['$http', function ($http, $scope, $window) {
             var current = null;
             var authenticated = false;
             return {
                 login: function (user, callback){
-                    $http.post('api/login', user).success(function(res){
+                    $http.post('api/login', user).success(function(data, status, headers, config){
                         callback(true);
+                        console.log(headers());
                     }).error(function(error){
                         callback(false);
                     });
@@ -73,4 +75,23 @@
                 }
             }
         }]);
+
+    angular.module('FriendZone').factory('authInterceptor', function($rootScope, $q, $window, $location) {
+        return {
+            request: function (config) {
+                config.headers = config.headers || {};
+                if ($window.sessionStorage.token) {
+                    config.headers.Authorization = 'JWT ' + $window.sessionStorage.token;
+                }
+                return config;
+            },
+            response: function (response) {
+                if (response.status === 401) {
+                    // handle the case where the user is not authenticated
+                    $location.url('/');
+                }
+                return response || $q.when(response);
+            }
+        };
+    })
 }());

@@ -7,6 +7,7 @@ var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
 var logger = require('morgan');
 var http = require('http');
+var cors = require('cors');
 var debug = require('debug')('friendzone:server');
 
 // connect to MongoDb database
@@ -20,6 +21,7 @@ var api = require('./back/routes/api');
 var dev = require('./back/routes/dev');
 
 var app = express();
+app.use(cors());
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(cookieParser());
