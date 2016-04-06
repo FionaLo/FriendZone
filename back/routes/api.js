@@ -47,7 +47,7 @@ api.post('/login',
             }
         });
 
-        res.set('Authorization', 'JWT ' + token);
+        // res.set('Authorization', 'JWT ' + token);
         
         res.json({
             user: req.user,
@@ -69,7 +69,7 @@ api.post('/signup',
             }
         });
 
-        res.setHeader("Authorization", 'JWT ' + token.toString());
+        // res.setHeader("Authorization", 'JWT ' + token);
 
         res.json({
             user: req.user,

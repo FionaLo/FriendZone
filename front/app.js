@@ -46,6 +46,8 @@
                     $http.post('api/login', user).success(function(data, status, headers, config){
                         callback(true);
                         console.log(headers());
+                        console.log(data.token);
+                        config.token = data.token;
                     }).error(function(error){
                         callback(false);
                     });
@@ -80,8 +82,8 @@
         return {
             request: function (config) {
                 config.headers = config.headers || {};
-                if ($window.sessionStorage.token) {
-                    config.headers.Authorization = 'JWT ' + $window.sessionStorage.token;
+                if (config.token) {
+                    config.headers.Authorization = "JWT " + config.token;
                 }
                 return config;
             },
