@@ -47,7 +47,6 @@
                         callback(true);
                         console.log(headers());
                         console.log(data.token);
-                        config.token = data.token;
                     }).error(function(error){
                         callback(false);
                     });
@@ -81,10 +80,8 @@
     angular.module('FriendZone').factory('authInterceptor', function($rootScope, $q, $window, $location) {
         return {
             request: function (config) {
-                config.headers = config.headers || {};
-                if (config.token) {
-                    config.headers.Authorization = "JWT " + config.token;
-                }
+                // config.headers = config.headers || {};
+                config.headers.Authorization = 'JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNDU5OTEwMjk4LCJzdWIiOiJ1c2VyIn0.DXDUkB0ZqPGZfbX0CQR8O9E3azafA_2unM-2jqf1VEk';
                 return config;
             },
             response: function (response) {
