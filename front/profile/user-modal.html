@@ -6,10 +6,20 @@
     <input type="text" class="form-control" ng-model="user.username" id="username"><br/>
     <label for="email">Email: </label>
     <input type="email" class="form-control" ng-model="user.email" id="email"><br/>
+    <label for="gender">Gender: </label>
+    <select class="form-control" ng-model="user.gender" ng-options="select for select in genderSelect"
+            id="gender">
+        <option></option>
+    </select>
     <label for="location">Location: </label>
     <input type="text" class="form-control" ng-model="user.location" id="location"><br/>
     <label for="description">Description: </label>
     <textarea class="form-control" rows="5" ng-model="user.description" id="description"></textarea>
+    <label for="group" ng-show="isAdmin">Group: </label>
+    <select class="form-control" ng-model="user.group" ng-options="select for select in groupSelect"
+            id="group" ng-show="isAdmin">
+        <option></option>
+    </select>
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary" type="button" ng-click="confirm();">Confirm</button>

@@ -53,7 +53,7 @@
                 </div>
                 <div class="col-sm-12 col-md-9 col-lg-8 list-controls search-list-controls">
                     <uib-rating ng-model="user.rating" max="5" read-only="true"></uib-rating>
-                    <button class="btn btn-info invite-btn">Invite</button>
+                    <button class="btn btn-info invite-btn" ng-click="openInviteModal(user)">Invite</button>
                 </div>
             </li>
         </ul>
@@ -65,7 +65,13 @@
         <h3 class="modal-title">Invite {{target.username}}</h3>
     </div>
     <div class="modal-body">
-        <p>List goes here</p>
+        <ul class="list-group">
+            <li class="list-group-item" ng-repeat="event in modal.filteredEvents">
+                <p>{{event.name}}</p>
+                <button class="btn btn-sm btn-info" ng-click="invite(event);">Invite</button>
+            </li>
+        </ul>
+        <uib-pagination total-items="modal.events.length" ng-model="modal.currentEventsPage" ng-change="eventsPageChanged(modal.currentEventsPage)"></uib-pagination>
     </div>
     <div class="modal-footer">
         <button class="btn btn-warning" type="button" ng-click="cancel();">Cancel</button>

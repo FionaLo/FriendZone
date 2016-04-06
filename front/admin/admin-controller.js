@@ -154,6 +154,28 @@
                 var end = start + $scope.pageSize;
                 $scope.filteredReports = $scope.reports.slice(start, end);
             };
+
+            $scope.clearUsers = function(){
+                $http.get('dev/clear-users').success(function(){
+                    $scope.init();
+                }).error(function(err){
+                    console.log(err);
+                });
+            };
+            $scope.clearEvents = function(){
+                $http.get('dev/clear-events').success(function(){
+                    $scope.init();
+                }).error(function(err){
+                    console.log(err);
+                });
+            };
+            $scope.initUsers = function(){
+                $http.get('dev/init-users').success(function(){
+                    $scope.init();
+                }).error(function(err){
+                    console.log(err);
+                });
+            };
             $scope.init();
         }]);
     angular.module('FriendZone').controller('ConfirmModalController', ['$scope', '$state', '$http', '$uibModalInstance',

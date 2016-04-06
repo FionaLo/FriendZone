@@ -4,9 +4,9 @@
         <h1>{{event.name}}</h1>
         <p class="lead">{{event.subtitle}}</p>
         <p id="btn-join">
-            <button class="btn btn-lg btn-default" ng-click="openEditEventModal();">Edit</button>
-            <button class="btn btn-lg btn-success join" ng-click="attend();">Join</button>
-            <button class="btn btn-lg btn-info" ng-click="unattend();">Un-Join</button>
+            <button class="btn btn-lg btn-default " ng-show="owner" ng-click="openEditEventModal();">Edit</button>
+            <button class="btn btn-lg btn-success join" ng-show="!attending && !passed" ng-click="attend();">Join</button>
+            <button class="btn btn-lg btn-info" ng-show="attending && !passed" ng-click="unattend();">Un-Join</button>
         </p>
     </div>
 
@@ -42,12 +42,8 @@
                 <div class="panel-body">
                     <ul class="list-group">
                         <li class="list-group-item clearfix" ng-repeat="user in filteredAttendees">
-                            <div class="col-xs-12 col-md-6 profiles">
-                                <a ng-click="gotoUser(user)">{{user.username}}</a>
-                            </div>
-                            <div class="col-xs-12 col-md-6 profiles"><br>
-                                <button class="btn btn-primary btn-sm" ng-click="openReviewUserModal(user);">Review</button>
-                            </div>
+                            <a ng-click="gotoUser(user)">{{user.username}}</a>
+                            <button class="btn btn-primary btn-sm" ng-show='passed' ng-click="openReviewUserModal(user);">Review</button>
                         </li>
                     </ul>
                     <uib-pagination total-items="event.attendees.length" ng-model="currentAttendPage" ng-change="attendPageChanged(currentAttendPage)"></uib-pagination>

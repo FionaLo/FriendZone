@@ -6,7 +6,14 @@
                 $scope.filteredUsers = [];
                 $scope.currentPage = 1;
                 $scope.pageSize = 10;
-                $scope.nameSearch = "";
+
+                var val = dataBus.get();
+                if (val != null){
+                    $scope.nameSearch = val;
+                } else {
+                    $scope.nameSearch = "";
+                }
+
                 $scope.locationSearch = "";
                 $scope.genderSelect = ['Male', 'Female', 'doesn\'t matter'];
                 $scope.sortSelect = ['Name', 'Rating', 'Time in FriendZone'];
@@ -94,6 +101,22 @@
                 }, function () {
                 });
             };
+            $scope.openInviteModal = function(user){
+                var modalInstance = $uibModal.open({
+                    templateUrl: 'invite-modal',
+                    controller: 'InviteModalController',
+                    resolve: {
+                        events: function () {
+                            return $scope.current.events;
+                        }
+                    }
+                });
+                modalInstance.result.then(function (event) {
+                    user.invites.push(event._id);
+                    $http.put('api/users', user);
+                }, function () {
+                });
+            };
 
             $scope.pageChanged = function (current) {
                 $scope.currentPage = current;
@@ -108,6 +131,41 @@
                 $state.go('profile');
             };
 
+            $scope.init();
+        }]);
+    angular.module('FriendZone').controller('InviteModalController', ['$scope', '$state', '$http', '$uibModalInstance', 'events',
+        function ($scope, $state, $http, $uibModalInstance, events) {
+            $scope.init = function () {
+                $scope.modal = {};
+                $scope.modal.pageSize = 10;
+                $scope.modal.events = [];
+                $scope.modal.currentEventsPage = 1;
+                $scope.modal.filteredEvents = [];
+
+                $http.get('api/events/many', {
+                    params: {
+                        ids: events
+                    }
+                }).success(function(res){
+                    $scope.modal.events = res;
+                    $scope.eventsPageChanged(1);
+                });
+            };
+
+            $scope.eventsPageChanged = function(current){
+                $scope.modal.currentEventsPage = current;
+                $scope.modal.filteredEvents = [];
+                var start = ($scope.modal.currentEventsPage - 1) * $scope.modal.pageSize;
+                var end = start + $scope.modal.pageSize;
+                $scope.modal.filteredEvents = $scope.modal.events.slice(start, end);
+            };
+
+            $scope.invite = function (event) {
+                $uibModalInstance.close(event);
+            };
+            $scope.cancel = function () {
+                $uibModalInstance.dismiss('cancel');
+            };
             $scope.init();
         }]);
 }());

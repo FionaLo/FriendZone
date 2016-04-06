@@ -6,6 +6,11 @@
             <li class="list-group-item">Number of Users: {{users.length}}</li>
             <li class="list-group-item">Number of Events: {{events.length}}</li>
             <li class="list-group-item">Reported Users: {{reports.length}}</li>
+            <li class="list-group-item">
+                <button class="btn btn-sm" ng-click="clearUsers()">Clear Users</button>
+                <button class="btn btn-sm" ng-click="clearEvents()">Clear Events</button>
+                <button class="btn btn-sm" ng-click="initUsers()">Init Test Users</button>
+            </li>
         </ul>
     </div>
 

@@ -12,7 +12,35 @@
                 }
                 auth.getCurrent(function(user){
                     $scope.current = user;
+                    if ($scope.event.creator = $scope.current._id){
+                        $scope.owner = true;
+                    } else {
+                        $scope.owner = false;
+                    }
+                    if ($scope.event.attendees.indexOf($scope.current._id) >= 0){
+                        $scope.attending = true;
+                    } else {
+                        $scope.attending = false;
+                    }
                 });
+                var date = new Date($scope.event.date);
+                var time = new Date($scope.event.time);
+                var today = new Date();
+                if (date > today){
+                    $scope.passed = false;
+                } else if (date < today){
+                    $scope.passed = true;
+                } else {
+                    time.setYear(today.getYear());
+                    time.setMonth(today.getMonth());
+                    time.setDate(today.getDate());
+                    if (time > today){
+                        $scope.passed = false;
+                    } else {
+                        $scope.passed = true;
+                    }
+                }
+
                 $http.get('api/users/single', {
                     params: {
                         id: $scope.event.creator
@@ -32,7 +60,11 @@
             };
 
             $scope.attend = function (){
-                $scope.current.attend_events.push($scope.event._id);
+                $scope.current.attend_events.push($scope.event._id)
+                var inviteIndex = $scope.current.invites.indexOf($scope.event._id);
+                if (inviteIndex >= 0){
+                    $scope.current.invites.splice(inviteIndex, 1);
+                }
                 $scope.event.attendees.push($scope.current._id);
                 $http.put('api/events', $scope.event).success(function(res){
                     $http.put('api/users', $scope.current).success(function(res){

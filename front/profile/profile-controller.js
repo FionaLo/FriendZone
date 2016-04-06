@@ -10,20 +10,26 @@
                 $scope.currentPastPage = 1;
                 $scope.pastEvents = [];
                 $scope.filteredPastEvents = [];
+
+                $scope.currentInvitePage = 1;
+                $scope.invites = [];
+                $scope.filteredInvites = [];
+
                 var val = dataBus.get();
-                if (val == null){
-                    auth.getCurrent(function(user){
+                auth.getCurrent(function(user){
+                    $scope.current = user;
+                    if (val == null){
                         $scope.user = user;
                         $scope.self = true;
                         $scope.userRating = 0;
                         $scope.initEvents();
-                    });
-                } else {
-                    $scope.user = val;
-                    $scope.self = false;
-                    $scope.userRating = 0;
-                    $scope.initEvents();
-                }
+                    } else {
+                        $scope.user = val;
+                        $scope.self = false;
+                        $scope.userRating = 0;
+                        $scope.initEvents();
+                    }
+                });
             };
             $scope.initEvents = function(){
                 var eventIds = $scope.user.events.concat($scope.user.attend_events);
@@ -33,8 +39,26 @@
                             ids: eventIds
                         }
                     }).success(function(res){
-                        $scope.upcomingEvents = res;
-                        $scope.pastEvents = res;
+                        for (var i = 0; i < res.length; i++){
+                            var e = res[i];
+                            var date = new Date(e.date);
+                            var time = new Date(e.time);
+                            var today = new Date();
+                            if (date > today){
+                                $scope.upcomingEvents.push(e);
+                            } else if (date < today){
+                                $scope.pastEvents.push(e);
+                            } else {
+                                time.setYear(today.getYear());
+                                time.setMonth(today.getMonth());
+                                time.setDate(today.getDate());
+                                if (time > today){
+                                    $scope.upcomingEvents.push(e);
+                                } else {
+                                    $scope.pastEvents.push(e);
+                                }
+                            }
+                        }
                         $scope.upcomingPageChanged(1);
                         $scope.pastPageChanged(1);
                     });
@@ -61,13 +85,15 @@
                     resolve: {
                         user: function () {
                             return $scope.user;
+                        },
+                        isAdmin: function() {
+                            return $scope.current.group === 'admin';
                         }
                     }
                 });
                 modalInstance.result.then(function (user) {
                     $scope.user = user;
-                    $http.put('api/users', $scope.user).success(function () {
-                    });
+                    $http.put('api/users', $scope.user);
                 }, function () {
                 });
             };
@@ -86,6 +112,13 @@
                 var end = start + $scope.pageSize;
                 $scope.filteredPastEvents = $scope.pastEvents.slice(start, end);
             };
+            $scope.invitePageChanged = function(current){
+                $scope.currentInvitePage = current;
+                $scope.filteredInvites = [];
+                var start = ($scope.currentInvitePage - 1) * $scope.pageSize;
+                var end = start + $scope.pageSize;
+                $scope.filteredInvites = $scope.invites.slice(start, end);
+            };
 
             $scope.gotoEvent = function(event){
                 dataBus.set(event);
@@ -93,8 +126,11 @@
             };
             $scope.init();
         }]);
-    angular.module('FriendZone').controller('UserModalController', ['$scope', '$state', '$http', '$uibModalInstance', 'user',
-        function ($scope, $state, $http, $uibModalInstance, user) {
+    angular.module('FriendZone').controller('UserModalController', ['$scope', '$state', '$http', '$uibModalInstance', 'user', 'isAdmin',
+        function ($scope, $state, $http, $uibModalInstance, user, isAdmin) {
+            $scope.isAdmin = isAdmin;
+            $scope.groupSelect = ['user', 'admin'];
+            $scope.genderSelect = ['Male', 'Female'];
             $scope.user = user;
             $scope.newPassword = '';
             $scope.confirm = function () {

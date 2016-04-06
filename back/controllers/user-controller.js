@@ -23,26 +23,38 @@ exports.createUsers = function (req, res) {
 
 // Create endpoint /api/users for GET
 exports.getUsers = function (req, res) {
-    console.log(req.query);
-    console.log(JSON.parse(req.query.filter));
     var query = {};
-    if (JSON.parse(req.query.filter).group !== undefined){
-        query.group = JSON.parse(req.query.filter).group;
-    }
-    if (JSON.parse(req.query.filter).username !== ''){
-        query.username = JSON.parse(req.query.filter).username;
-    }
-    if (JSON.parse(req.query.filter).gender !== ''){
-        query.gender = JSON.parse(req.query.filter).gender;
+    if (req.query.filter != undefined && req.query.sort != undefined){
+        if (JSON.parse(req.query.filter).group !== undefined){
+            query.group = JSON.parse(req.query.filter).group;
+        }
+        if (JSON.parse(req.query.filter).username !== '' || JSON.parse(req.query.filter).username !== undefined){
+            query.username = JSON.parse(req.query.filter).username;
+        }
+        if (JSON.parse(req.query.filter).gender !== '' || JSON.parse(req.query.filter).gender !== undefined){
+            query.gender = JSON.parse(req.query.filter).gender;
+        }
+        if (JSON.parse(req.query.filter).location !== '' || JSON.parse(req.query.filter).location !== undefined){
+            query.location = JSON.parse(req.query.filter).location;
+        }
+        sortQuery = JSON.parse(req.query.sort);
+        User.find(query).sort(sortQuery).exec(function (err, users) {
+            if (err){
+                res.error(err);
+            } else {
+                res.json(users);
+            }
+        });
+    } else {
+        User.find().exec(function (err, users) {
+            if (err){
+                res.error(err);
+            } else {
+                res.json(users);
+            }
+        });
     }
 
-    User.find(query).sort(JSON.parse(req.query.sort)).exec(function (err, users) {
-        if (err){
-            res.error(err);
-        } else {
-            res.json(users);
-        }
-    });
 };
 exports.getUsersMany = function (req, res){
     User.find({'_id': { $in: req['query'].ids}}, function (err, users) {
