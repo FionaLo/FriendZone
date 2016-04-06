@@ -11,7 +11,8 @@ exports.createUsers = function (req, res) {
     var user = new User({
         username: req.body.username,
         password: req.body.password,
-        group: req.body.group
+        group: req.body.group,
+        rating: 5
     });
 
     user.save(function (err) {
@@ -45,6 +46,7 @@ exports.getUserSingle = function (req, res){
         if (err){
             res.send(err);
         } else {
+            console.log(userData);
             var user = userData;
             res.json(user);
         }
@@ -71,6 +73,7 @@ exports.putUser = function (req, res) {
 
             user.reported = req.body.reported;
             user.reported_text = req.body.reported_text;
+            user.rating = req.body.rating;
             user.rating_total = req.body.rating_total;
             user.rating_count = req.body.rating_count;
             user.events = req.body.events;

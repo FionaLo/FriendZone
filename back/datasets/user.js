@@ -28,6 +28,7 @@ var UserSchema = new Schema({
     profile_image: String,
     reported: Boolean,
     reported_text: String,
+    rating: Number,
     rating_total: Number,
     rating_count: Number,
     events: [],

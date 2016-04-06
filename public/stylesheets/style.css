@@ -10,6 +10,10 @@ body,
 .body {
   margin-top: 5%;
 }
+.nav-profile {
+  padding-top: 20%;
+  margin-top: 20px;
+}
 .landing-splash {
   width: 100%;
   height: 100%;

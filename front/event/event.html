@@ -41,7 +41,14 @@
                 </div>
                 <div class="panel-body">
                     <ul class="list-group">
-                        <li class="list-group-item" ng-repeat="user in filteredAttendees">{{user.username}}</li>
+                        <li class="list-group-item clearfix" ng-repeat="user in filteredAttendees">
+                            <div class="col-xs-12 col-md-6 profiles">
+                                <a ng-click="gotoUser(user)">{{user.username}}</a>
+                            </div>
+                            <div class="col-xs-12 col-md-6 profiles"><br>
+                                <button class="btn btn-primary" ng-click="openReviewUserModal(user);">Review</button>
+                            </div>
+                        </li>
                     </ul>
                     <uib-pagination total-items="event.attendees.length" ng-model="currentAttendPage" ng-change="attendPageChanged(currentAttendPage)"></uib-pagination>
                 </div>
@@ -51,4 +58,16 @@
 </div>
 <script type="text/ng-template" id="edit-event-modal">
     <div ng-include src="'front/event/event-modal.html'"/>
+</script>
+<script type="text/ng-template" id="review-user-modal">
+    <div class="modal-header">
+        <h3 class="modal-title">Review User</h3>
+    </div>
+    <div class="modal-body">
+        <uib-rating ng-model="rating" max="5"></uib-rating>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="button" ng-click="confirm();">Confirm</button>
+        <button class="btn btn-warning" type="button" ng-click="cancel();">Cancel</button>
+    </div>
 </script>

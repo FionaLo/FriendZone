@@ -18,6 +18,7 @@
                         id: $scope.event.creator
                     }
                 }).success(function(res){
+                    console.log(res);
                     $scope.creator = res.username;
                 });
                 $http.get('api/users/many', {
@@ -65,11 +66,23 @@
                         }
                     }
                 });
-
                 modalInstance.result.then(function (event) {
                     $http.put('api/events', event).success(function(res){
                         $scope.init();
                     });
+                }, function () {
+                });
+            };
+            $scope.openReviewUserModal = function(user){
+                var modalInstance = $uibModal.open({
+                    templateUrl: 'review-user-modal',
+                    controller: 'ReviewUserModalController'
+                });
+                modalInstance.result.then(function (rating) {
+                    user.rating_total += rating;
+                    user.rating_count++;
+                    user.rating = Math.round(user.rating_count/user.rating_total);
+                    $http.put('api/users', user);
                 }, function () {
                 });
             };
@@ -81,18 +94,24 @@
                 var end = start + $scope.pageSize;
                 $scope.filteredAttendees = $scope.attendees.slice(start, end);
             };
+
+            $scope.gotoUser = function(user){
+                dataBus.set(user);
+                $state.go('profile');
+            };
             $scope.init();
         }]);
     angular.module('FriendZone').controller('EventModalController', ['$scope', '$state', '$http', '$uibModalInstance', 'event',
         function ($scope, $state, $http, $uibModalInstance, event) {
-
             $scope.init = function() {
                 $scope.modal = {};
                 if (event == null){
                     $scope.modal.title = 'New Event';
+                    $scope.modal.date = new Date();
                 } else {
                     $scope.modal.title = 'Edit Event';
                     $scope.modal.event = event;
+                    $scope.modal.date = new Date(event.date);
                 }
 
                 $scope.dateFormat = 'dd-MMMM-yyyy';
@@ -105,8 +124,6 @@
                 $scope.datePopup = {
                     opened: false
                 };
-                $scope.modal.date = new Date(event.date);
-
             };
             $scope.openDatePopup = function() {
                 $scope.datePopup.opened = true;
@@ -120,5 +137,14 @@
             };
 
             $scope.init();
+        }]);
+    angular.module('FriendZone').controller('ReviewUserModalController', ['$scope', '$state', '$http', '$uibModalInstance',
+        function ($scope, $state, $http, $uibModalInstance) {
+            $scope.confirm = function () {
+                $uibModalInstance.close($scope.rating);
+            };
+            $scope.cancel = function () {
+                $uibModalInstance.dismiss('cancel');
+            };
         }]);
 }());

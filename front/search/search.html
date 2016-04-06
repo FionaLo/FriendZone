@@ -78,9 +78,8 @@
                     </div>
                 </div>
                 <div class="col-sm-12 col-md-9 col-lg-8 list-controls search-list-controls">
-                    <h5> Average Rating: 4/5</h5>
-                    <button class="btn btn-default message-btn" data-toggle="modal" data-target="#message-modal">Send Message</button>
-                    <button class="btn btn-info invite-btn" data-toggle="modal" data-target="#invite-modal">Invite</button>
+                    <uib-rating ng-model="user.rating" max="5" read-only="true"></uib-rating>
+                    <button class="btn btn-info invite-btn">Invite</button>
                 </div>
             </li>
         </ul>
