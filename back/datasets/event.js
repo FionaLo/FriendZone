@@ -7,17 +7,19 @@ var Schema = mongoose.Schema;
 
 var EventSchema = new Schema({
     name: String,
+    subtitle: String,
     description: String,
+    location: String,
+    date: String,
+    time: String,
+    creator: String,
+    attendees: [],
     comments: [
         {
             body: String,
             date: Date
         }
     ],
-    date: {
-        type: Date,
-        default: Date.now
-    },
     meta: {
         joined: Number
     }

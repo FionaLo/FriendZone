@@ -5,7 +5,6 @@ var Token = require('../datasets/token');
 
 var passport = require('passport');
 require('../controllers/authentication-controller')(passport);
-// var jwt = require('jwt-simple');
 var jwt = require('jsonwebtoken');
 var secret = require('../config/auth').secret;
 
@@ -22,13 +21,18 @@ api.route('/events')
     .get(passport.authenticate(['jwt', 'basic'], { session: false }), eventController.getEvents)
     .put(passport.authenticate(['jwt', 'basic'], { session: false }), eventController.putEvent)
     .delete(passport.authenticate(['jwt', 'basic'], { session: false }), eventController.deleteEvent);
+api.route('/events/many')
+    .get(passport.authenticate(['jwt', 'basic'], { session: false }), eventController.getEventsMany);
 
 api.route('/users')
     .post(userController.createUsers)
     .get(passport.authenticate(['jwt', 'basic'], { session: false }), userController.getUsers)
     .put(passport.authenticate(['jwt', 'basic'], { session: false }), userController.putUser)
     .delete(passport.authenticate(['jwt', 'basic-admin'], { session: false }), userController.deleteUser);
-
+api.route('/users/single')
+    .get(passport.authenticate(['jwt', 'basic'], { session: false }), userController.getUserSingle);
+api.route('/users/many')
+    .get(passport.authenticate(['jwt', 'basic'], { session: false }), userController.getUsersMany);
 api.route('/users/current')
     .get(passport.authenticate(['jwt', 'basic'], { session: false }), userController.getCurrentUser);
 
@@ -42,11 +46,11 @@ api.post('/login',
                     value: token
                 });
                 console.log(newToken);
-                newToken.save();
+                // newToken.save();
             }
         });
 
-        // res.set('Authorization', token);
+        // res.set('Authorization', 'JWT ' + token);
         
         res.json({
             user: req.user,
@@ -64,11 +68,11 @@ api.post('/signup',
                     value: token
                 });
                 console.log(newToken);
-                newToken.save();
+                // newToken.save();
             }
         });
 
-        // res.set('Authorization', token);
+        // res.setHeader("Authorization", 'JWT ' + token);
 
         res.json({
             user: req.user,

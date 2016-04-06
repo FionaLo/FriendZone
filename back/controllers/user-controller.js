@@ -23,11 +23,43 @@ exports.createUsers = function (req, res) {
 
 // Create endpoint /api/users for GET
 exports.getUsers = function (req, res) {
-    User.find(req['query'], function (err, users) {
+    console.log(req.query);
+    console.log(JSON.parse(req.query.filter));
+    var query = {};
+    if (JSON.parse(req.query.filter).group !== undefined){
+        query.group = JSON.parse(req.query.filter).group;
+    }
+    if (JSON.parse(req.query.filter).username !== ''){
+        query.username = JSON.parse(req.query.filter).username;
+    }
+    if (JSON.parse(req.query.filter).gender !== ''){
+        query.gender = JSON.parse(req.query.filter).gender;
+    }
+
+    User.find(query).sort(JSON.parse(req.query.sort)).exec(function (err, users) {
         if (err){
             res.error(err);
         } else {
             res.json(users);
+        }
+    });
+};
+exports.getUsersMany = function (req, res){
+    User.find({'_id': { $in: req['query'].ids}}, function (err, users) {
+        if (err){
+            res.send(err);
+        } else {
+            res.json(users);
+        }
+    });
+};
+exports.getUserSingle = function (req, res){
+    User.findById(req['query'].id, function (err, userData) {
+        if (err){
+            res.send(err);
+        } else {
+            var user = userData;
+            res.json(user);
         }
     });
 };
@@ -36,26 +68,36 @@ exports.getUsers = function (req, res) {
 exports.putUser = function (req, res) {
     // Use the Event model to find a specific event
     User.findById(req.body._id, function (err, userData) {
-        if (err)
+        if (err){
             res.send(err);
-        var user = userData;
-        // Update the existing user username
-        user.username = req.body.username;
+        } else {
+            var user = userData;
+            // Update the existing user username
+            user.username = req.body.username;
 
-        // Update the existing user password
-        user.password = req.body.password;
+            // Update the existing user password
+            user.password = req.body.password;
 
-        user.email = req.body.email;
-        user.reported = req.body.reported;
-        user.reported_text = req.body.reported_text;
+            user.email = req.body.email;
+            user.location = req.body.location;
+            user.gender = req.body.gender;
+            user.description = req.body.description;
 
-        // Save the event and check for errors
-        user.save(function (err) {
-            if (err)
-                res.send(err);
+            user.reported = req.body.reported;
+            user.reported_text = req.body.reported_text;
+            user.rating_total = req.body.rating_total;
+            user.rating_count = req.body.rating_count;
+            user.events = req.body.events;
+            user.attend_events = req.body.attend_events;
 
-            res.json(user);
-        });
+            // Save the event and check for errors
+            user.save(function (err) {
+                if (err)
+                    res.send(err);
+
+                res.json(user);
+            });
+        }
     });
 };
 
@@ -72,9 +114,11 @@ exports.deleteUser = function (req, res) {
 
 exports.getCurrentUser = function (req, res) {
     User.findById(req.user._id, function (err, userData) {
-        if (err)
+        if (err){
             res.send(err);
-        var user = userData;
-        res.json(user);
+        } else {
+            var user = userData;
+            res.json(user);
+        }
     });
 };

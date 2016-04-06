@@ -1,0 +1,17 @@
+<div class="modal-header">
+    <h3 class="modal-title">Edit Profile</h3>
+</div>
+<div class="modal-body">
+    <label for="username">Username: </label>
+    <input type="text" class="form-control" ng-model="user.username" id="username"><br/>
+    <label for="email">Email: </label>
+    <input type="email" class="form-control" ng-model="user.email" id="email"><br/>
+    <label for="location">Location: </label>
+    <input type="text" class="form-control" ng-model="user.location" id="location"><br/>
+    <label for="description">Description: </label>
+    <textarea class="form-control" rows="5" ng-model="user.description" id="description"></textarea>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-click="confirm();">Confirm</button>
+    <button class="btn btn-warning" type="button" ng-click="cancel();">Cancel</button>
+</div>

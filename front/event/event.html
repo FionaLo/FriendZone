@@ -1,10 +1,73 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<nav class="navbar navbar-default navbar-fixed-top" ng-include src="'front/navigation/navigation.html'" ng-controller="NavigationController"></nav>
+<div class="container body">
+    <div class="jumbotron">
+        <h1>{{event.name}}</h1>
+        <p class="lead">{{event.subtitle}}</p>
+        <p id="btn-join">
+            <button class="btn btn-lg btn-default" ng-click="openEditEventModal();">Edit</button>
+            <button class="btn btn-lg btn-success join" ng-click="attend();">Join</button>
+            <button class="btn btn-lg btn-info" ng-click="unattend();">Un-Join</button>
+        </p>
+    </div>
 
-</body>
-</html>
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="panel panel-default text-center">
+                <div class="panel-heading">
+                    <h1>Details</h1>
+                </div>
+                <div class="panel-body">
+                    <p><strong>Date: </strong>{{event.date | date:'fullDate'}}</p>
+                    <p><strong>Time: </strong>{{event.time | date:'shortTime'}}</p>
+                    <p><strong>Location: </strong>{{event.location}}</p>
+                    <p><strong>Created by: </strong>{{creator}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="panel panel-default text-center">
+                <div class="panel-heading">
+                    <h1>Description</h1>
+                </div>
+                <div class="panel-body">
+                    <p>{{event.description}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="panel panel-default text-center">
+                <div class="panel-heading">
+                    <h1>Attendees</h1>
+                </div>
+                <div class="panel-body">
+                    <ul class="list-group">
+                        <li class="list-group-item clearfix" ng-repeat="user in filteredAttendees">
+                            <div class="col-xs-12 col-md-6 profiles">
+                                <a ng-click="gotoUser(user)">{{user.username}}</a>
+                            </div>
+                            <div class="col-xs-12 col-md-6 profiles"><br>
+                                <button class="btn btn-primary btn-sm" ng-click="openReviewUserModal(user);">Review</button>
+                            </div>
+                        </li>
+                    </ul>
+                    <uib-pagination total-items="event.attendees.length" ng-model="currentAttendPage" ng-change="attendPageChanged(currentAttendPage)"></uib-pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/ng-template" id="edit-event-modal">
+    <div ng-include src="'front/event/event-modal.html'"/>
+</script>
+<script type="text/ng-template" id="review-user-modal">
+    <div class="modal-header">
+        <h3 class="modal-title">Review User</h3>
+    </div>
+    <div class="modal-body">
+        <uib-rating ng-model="rating" max="5"></uib-rating>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="button" ng-click="confirm();">Confirm</button>
+        <button class="btn btn-warning" type="button" ng-click="cancel();">Cancel</button>
+    </div>
+</script>

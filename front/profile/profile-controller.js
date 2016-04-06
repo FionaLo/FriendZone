@@ -26,15 +26,17 @@
                 }
             };
             $scope.initEvents = function(){
-                var eventIds = $scope.user.events + $scope.user.attended_events;
+                var eventIds = $scope.user.events.concat($scope.user.attend_events);
                 if (eventIds.length > 0){
-                    $http.get('api/events', {
+                    $http.get('api/events/many', {
                         params: {
-                            '_id': { $in: eventIds}
+                            ids: eventIds
                         }
                     }).success(function(res){
                         $scope.upcomingEvents = res;
                         $scope.pastEvents = res;
+                        $scope.upcomingPageChanged(1);
+                        $scope.pastPageChanged(1);
                     });
                 }
             };
@@ -55,7 +57,7 @@
             $scope.openEditProfile = function(){
                 var modalInstance = $uibModal.open({
                     templateUrl: 'edit-profile-modal',
-                    controller: 'EditUserModalController',
+                    controller: 'UserModalController',
                     resolve: {
                         user: function () {
                             return $scope.user;
@@ -84,7 +86,27 @@
                 var end = start + $scope.pageSize;
                 $scope.filteredPastEvents = $scope.pastEvents.slice(start, end);
             };
+
+            $scope.gotoEvent = function(event){
+                dataBus.set(event);
+                $state.go('event');
+            };
             $scope.init();
+        }]);
+    angular.module('FriendZone').controller('UserModalController', ['$scope', '$state', '$http', '$uibModalInstance', 'user',
+        function ($scope, $state, $http, $uibModalInstance, user) {
+            $scope.user = user;
+            $scope.newPassword = '';
+            $scope.confirm = function () {
+                if ($scope.newPassword !== ''){
+                    $scope.user.password = $scope.newPassword;
+                }
+                $uibModalInstance.close($scope.user);
+            };
+
+            $scope.cancel = function () {
+                $uibModalInstance.dismiss('cancel');
+            };
         }]);
     angular.module('FriendZone').controller('ReportModalController', ['$scope', '$state', '$http', '$uibModalInstance',
         function ($scope, $state, $http, $uibModalInstance) {

@@ -16,54 +16,28 @@
             <h3>Search for New Friends!</h3>
             <ul class="list-group search-list-group">
                 <li class="list-group-item">
-                    <div class="input-group">
-                        <span class="input-group-addon">Search:</span>
-                        <input type="text" class="form-control" placeholder="Hello, Is it me you're looking for?">
-                    </div>
+                    <label for="username">Search: </label>
+                    <input type="text" class="form-control" placeholder="Hello, Is it me you're looking for?"
+                        ng-model="nameSearch" id="username" ng-change="updateUserList();">
                 </li>
                 <li class="list-group-item">
-                    <div class="dropdown">
-                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                            Show Me:
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                            <li><a href="#">Only Men</a></li>
-                            <li><a href="#">Only Women</a></li>
-                            <li><a href="#">It Doesn't Matter</a></li>
-                        </ul>
-                    </div>
+                    <label for="location">Location: </label>
+                    <input type="text" class="form-control" placeholder="Toronto, ON"
+                           ng-model="locationSearch" id="location" ng-change="updateUserList();">
                 </li>
                 <li class="list-group-item">
-                    <p>hello</p>
-                    <!--<label class="control-label col-xs-2">Ages:</label>-->
-                    <!--<select class="selectpicker col-xs-10">-->
-                        <!--<option value="young">18-20</option>-->
-                        <!--<option value="lessYoung">21-30</option>-->
-                        <!--<option value="notYoung">30+</option>-->
-                        <!--<option value="whoCares">It Doesn't Matter</option>-->
-                    <!--</select>-->
+                    <label for="gender">Gender</label>
+                    <select class="form-control" ng-model="genderSearch" ng-options="select for select in genderSelect"
+                        id="gender" ng-change="updateUserList();">
+                        <option></option>
+                    </select>
                 </li>
                 <li class="list-group-item">
-                    <p>hello</p>
-                    <!--<label class="control-label col-xs-2">Within:</label>-->
-                    <!--<select class="selectpicker col-xs-10">-->
-                        <!--<option value="close">10km</option>-->
-                        <!--<option value="lessClose">15km</option>-->
-                        <!--<option value="notReallyClose">20km</option>-->
-                        <!--<option value="far">25km</option>-->
-                        <!--<option value="whoCares">It Doesn't Matter</option>-->
-                    <!--</select>-->
-                </li>
-                <li class="list-group-item">
-                    <p>hello</p>
-                    <!--<label class="control-label col-xs-2">Sort By:</label>-->
-                    <!--<select class="selectpicker col-xs-10">-->
-                        <!--<option value="newest">Newly Arrived</option>-->
-                        <!--<option value="oldestOnSite">Longest time in FriendZone</option>-->
-                        <!--<option value="popular">Highest Rated</option>-->
-                        <!--<option value="sucky">Underdogs</option>-->
-                    <!--</select>-->
+                    <label for="sort">Sort by: </label>
+                    <select class="form-control" ng-model="sortBy" ng-options="select for select in sortSelect"
+                            id="sort" ng-change="updateUserList();">
+                        <option></option>
+                    </select>
                 </li>
             </ul>
         </div>
@@ -72,15 +46,14 @@
         <ul class="list-group">
             <li class="list-group-item clearfix" ng-repeat="user in filteredUsers">
                 <div class="col-sm-12 col-md-3 col-lg-4">
-                    <h3><a href="/profile">{{user.username}}</a></h3>
+                    <h3><a ng-click="gotoUser(user);">{{user.username}}</a></h3>
                     <div>
                         <img src="public/images/kyoto.jpg" class="avatar img-square img-thumbnail" alt="avatar">
                     </div>
                 </div>
                 <div class="col-sm-12 col-md-9 col-lg-8 list-controls search-list-controls">
-                    <h5> Average Rating: 4/5</h5>
-                    <button class="btn btn-default message-btn" data-toggle="modal" data-target="#message-modal">Send Message</button>
-                    <button class="btn btn-info invite-btn" data-toggle="modal" data-target="#invite-modal">Invite</button>
+                    <uib-rating ng-model="user.rating" max="5" read-only="true"></uib-rating>
+                    <button class="btn btn-info invite-btn">Invite</button>
                 </div>
             </li>
         </ul>
@@ -99,28 +72,5 @@
     </div>
 </script>
 <script type="text/ng-template" id="new-event-modal">
-    <div class="modal-header">
-        <h3 class="modal-title">New Event</h3>
-    </div>
-    <div class="modal-body">
-        <label for="name">Event Name: </label>
-        <input type="text" class="form-control" ng-model="event.name" id="name"><br/>
-        <label for="date">Date: </label>
-        <p class="input-group" id="date">
-            <input type="text" class="form-control" uib-datepicker-popup="{{dateFormat}}" ng-model="event.date"
-                   is-open="datePopup.opened" datepicker-options="dateOptions" ng-required="true"
-                   close-text="Close" alt-input-formats="altInputFormats" />
-            <span class="input-group-btn">
-                <button type="button" class="btn btn-default" ng-click="openDatePopup()">
-                    <i class="glyphicon glyphicon-calendar"></i>
-                </button>
-            </span>
-        </p>
-        <label for="description">Description: </label>
-        <textarea class="form-control" rows="5" id="description" ng-model="event.description"></textarea>
-    </div>
-    <div class="modal-footer">
-        <button class="btn btn-warning" type="button" ng-click="create();">Create</button>
-        <button class="btn btn-warning" type="button" ng-click="cancel();">Cancel</button>
-    </div>
+    <div ng-include src="'front/event/event-modal.html'"/>
 </script>
