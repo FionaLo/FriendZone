@@ -1,13 +1,14 @@
 var jwt = require('jsonwebtoken');
-var secret = require('../config/auth').secret;
 var User = require('../datasets/user');
 var Token = require('../datasets/token');
+var authConfig = require('../config/auth');
 
 var LocalStrategy = require('passport-local').Strategy;
 var BasicStrategy = require('passport-http').BasicStrategy;
 var JwtStrategy = require('passport-jwt').Strategy,
     ExtractJwt = require('passport-jwt').ExtractJwt;
 var BearerStrategy = require('passport-http-bearer').Strategy;
+var FacebookStrategy = require('passport-facebook').Strategy;
 
 module.exports = function(passport) {
 
@@ -150,9 +151,9 @@ module.exports = function(passport) {
     // Jwt strategy
     var opts = {};
     opts.jwtFromRequest = ExtractJwt.fromAuthHeader();
-    opts.secretOrKey = secret;
+    opts.secretOrKey = authConfig.secret;
 
-    passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
+    passport.use('jwt', new JwtStrategy(opts, function(jwt_payload, done) {
         User.findOne({ username: jwt_payload.username }, function(err, user) {
             if (err) return done(err, false);
 
@@ -173,7 +174,7 @@ module.exports = function(passport) {
 
                     if (!token) return callback(null, false);
 
-                    var decoded = jwt.verify(token, secret, function(err, decoded) {
+                    var decoded = jwt.verify(token, authConfig.secret, function(err, decoded) {
                         console.log(decoded);
                     });
                     //we find the user that has made the request
@@ -194,6 +195,66 @@ module.exports = function(passport) {
             }
         }
     ));
+
+    // Facebook Strategy
+    passport.use(new FacebookStrategy({
+
+            // app id and secret configuration
+            clientID        : authConfig.facebookAuth.clientID,
+            clientSecret    : authConfig.facebookAuth.clientSecret,
+            callbackURL     : authConfig.facebookAuth.callbackURL
+        },
+
+        // retrieve token and profile
+        function(token, refreshToken, profile, done) {
+
+            // asynchronous
+            process.nextTick(function() {
+
+                // find the user in the database based on their facebook id
+                User.findOne({ 'facebook.id' : profile.id }, function(err, user) {
+
+                    // if there is an error, stop everything and return that
+                    // ie an error connecting to the database
+                    if (err)
+                        return done(err);
+
+                    // if the user is found, then log them in
+                    if (user) {
+                        return done(null, user); // user found, return that user
+                    } else {
+                        // if there is no user found with that facebook id, create them
+                        var newUser  = new User();
+
+                        // set all of the facebook information in our user model
+                        newUser.facebook.id    = profile.id;
+                        // we will save the token that facebook provides to the user
+                        newUser.facebook.token = token;
+                        //
+                        newUser.facebook.name  = profile.name.givenName + ' '
+                            + profile.name.familyName;
+                        // take the first email returned by facebook
+                        newUser.facebook.email = profile.emails[0].value;
+
+                        newUser.name = newUser.facebook.name;
+                        newUser.username = profile.name.givenName.toLowerCase()
+                            + profile.name.familyName.toLowerCase();
+                        newUser.email = newUser.facebook.email;
+
+                        // save our user to the database
+                        newUser.save(function(err) {
+                            if (err)
+                                throw err;
+
+                            // if successful, return the new user
+                            return done(null, newUser);
+                        });
+                    }
+
+                });
+            });
+
+        }));
 };
 
 // Define a middleware function to be used for every secured routes

@@ -5,7 +5,6 @@ var Token = require('../datasets/token');
 
 var passport = require('passport');
 require('../controllers/authentication-controller')(passport);
-// var jwt = require('jwt-simple');
 var jwt = require('jsonwebtoken');
 var secret = require('../config/auth').secret;
 
@@ -47,11 +46,11 @@ api.post('/login',
                     value: token
                 });
                 console.log(newToken);
-                newToken.save();
+                // newToken.save();
             }
         });
 
-        // res.set('Authorization', token);
+        // res.set('Authorization', 'JWT ' + token);
         
         res.json({
             user: req.user,
@@ -69,11 +68,11 @@ api.post('/signup',
                     value: token
                 });
                 console.log(newToken);
-                newToken.save();
+                // newToken.save();
             }
         });
 
-        // res.set('Authorization', token);
+        // res.setHeader("Authorization", 'JWT ' + token);
 
         res.json({
             user: req.user,
