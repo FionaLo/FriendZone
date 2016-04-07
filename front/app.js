@@ -1,6 +1,6 @@
 (function(){
     angular.module('FriendZone', ['ui.router', 'ui.bootstrap', 'ngFlash'])
-        .config(function($stateProvider, $urlRouterProvider, $httpProvider){
+        .config(function($stateProvider, $urlRouterProvider, $httpProvider, $locationProvider){
             $urlRouterProvider.otherwise('/landing');
             $stateProvider.state('landing', {
                 url: '/landing',
@@ -24,6 +24,7 @@
                 controller: 'AdminController'
             });
             $httpProvider.interceptors.push('authInterceptor');
+            $locationProvider.html5Mode(true);
         });
         angular.module('FriendZone').factory('dataBus', function () {
             var data = null;
