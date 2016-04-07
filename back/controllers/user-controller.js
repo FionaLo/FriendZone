@@ -29,23 +29,36 @@ exports.getUsers = function (req, res) {
         if (JSON.parse(req.query.filter).group !== undefined){
             query.group = JSON.parse(req.query.filter).group;
         }
-        if (JSON.parse(req.query.filter).username !== '' || JSON.parse(req.query.filter).username !== undefined){
+        if (JSON.parse(req.query.filter).username !== '' && JSON.parse(req.query.filter).username !== undefined){
             query.username = JSON.parse(req.query.filter).username;
         }
-        if (JSON.parse(req.query.filter).gender !== '' || JSON.parse(req.query.filter).gender !== undefined){
+        if (JSON.parse(req.query.filter).gender !== '' && JSON.parse(req.query.filter).gender !== undefined){
             query.gender = JSON.parse(req.query.filter).gender;
         }
-        if (JSON.parse(req.query.filter).location !== '' || JSON.parse(req.query.filter).location !== undefined){
+        if (JSON.parse(req.query.filter).location !== '' && JSON.parse(req.query.filter).location !== undefined){
             query.location = JSON.parse(req.query.filter).location;
         }
         sortQuery = JSON.parse(req.query.sort);
-        User.find(query).sort(sortQuery).exec(function (err, users) {
-            if (err){
-                res.error(err);
-            } else {
-                res.json(users);
-            }
-        });
+        if (sortQuery === {}){
+            User.find(query).exec(function (err, users) {
+                if (err){
+                    res.error(err);
+                } else {
+                    res.json(users);
+                }
+            });
+        } else {
+            console.log(sortQuery);
+            console.log(query);
+            User.find(query).sort(sortQuery).exec(function (err, users) {
+                if (err){
+                    res.error(err);
+                } else {
+                    res.json(users);
+                }
+            });
+        }
+
     } else {
         User.find().exec(function (err, users) {
             if (err){

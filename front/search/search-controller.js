@@ -15,17 +15,16 @@
                 }
 
                 $scope.locationSearch = "";
+                $scope.genderSearch = 'doesn\'t matter';
                 $scope.genderSelect = ['Male', 'Female', 'doesn\'t matter'];
                 $scope.sortSelect = ['Name', 'Rating', 'Time in FriendZone'];
+                $scope.sortBy = 'Name';
                 $scope.updateUserList();
                 auth.getCurrent(function(current){
                     $scope.current = current;
                 });
             };
 
-            $scope.onFilterChange = function(){
-                console.log($scope.genderSearch);
-            };
             $scope.updateUserList = function(){
                 var genderFilter = "";
                 if ($scope.genderSearch !== 'doesn\'t matter'){
