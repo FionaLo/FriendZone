@@ -15,22 +15,48 @@ pages:
 
 var assert = require('assert');
 
-var FriendZone = require('./startup.js');
+var users = require('./back/user-controller.js');
+var search = require('./back/search-controller.js');
+
 
 describe('FriendZone tests', function() {
 
     describe('Admin tests', function() {
 
-        return null;
         /*//////ADMIN//////*/
-        //function:
-        //function:
-        //function:
-        //function:
-        //var:
-        //var:
-        //var:
-        //var:
+        //function: getUsers()
+        //function: getEvents()
+        //function: getReports()
+
+        //test both creation and returning of objects
+
+        it('checks api/users', function(done){
+            var newUser = new users.User({
+                username: 'test',
+                password: 'test',
+                group: null
+            });
+
+            assert($http.get('api/users') != null);
+            done();
+        })
+
+
+        it('checks api/events', function(done){
+            var newEvent = search.openNewEvent();
+
+            assert($http.get('api/events') != null);
+            done();
+        })
+
+
+        it('checks api/reports', function(done){
+            //var newEvent = new Event somehow create an event
+
+            assert($http.get('api/events') != null);
+            done();
+        })
+
     })
 
 
@@ -53,14 +79,17 @@ describe('FriendZone tests', function() {
     describe('Landing tests', function(){
 
         /*//////LANDING//////*/
-        //function:
-        //function:
-        //function:
-        //function:
-        //var:
-        //var:
-        //var:
-        //var:
+
+        it('returns new user', function(done){
+            var newUser = new users.User({
+                username: 'test',
+                password: 'test',
+                group: null
+            });
+
+            assert(newUser != null);
+            done();
+        })
 
     })
 
@@ -99,9 +128,9 @@ describe('FriendZone tests', function() {
     describe('Search tests', function(){
 
         /*//////SEARCH//////*/
-        //function:
-        //function:
-        //function:
+        //function: updateUserList()
+        //function: openNewEvent()
+        //function: openInviteModal
         //function:
         //var:
         //var:
