@@ -43,6 +43,8 @@ var UserSchema = new Schema({
     }
 });
 
+// followed tutorial on scotch.io
+// before each save() call
 UserSchema.pre('save', function(next) {
     var user = this;
 
@@ -64,6 +66,7 @@ UserSchema.pre('save', function(next) {
     });
 });
 
+// followed tutorial on scotch.io
 UserSchema.methods.comparePassword = function(candidatePassword, cb) {
     bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
         if (err) return cb(err);

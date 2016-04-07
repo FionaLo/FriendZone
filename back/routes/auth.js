@@ -11,6 +11,7 @@ var secret = require('../config/auth').secret;
 
 var Token = require('../datasets/token');
 
+// Followed Scotch.io tutorial on setting up facebook startegy
 // Facebook routes
 // route for facebook authentication and login
 auth.get('/facebook', passport.authenticate('facebook', { scope : 'email' }));

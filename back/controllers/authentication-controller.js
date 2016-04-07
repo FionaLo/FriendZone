@@ -10,10 +10,11 @@ var JwtStrategy = require('passport-jwt').Strategy,
 var BearerStrategy = require('passport-http-bearer').Strategy;
 var FacebookStrategy = require('passport-facebook').Strategy;
 
+// Followed tutorial on Scotch.io for adding passport strategies
+// 
 module.exports = function(passport) {
 
     // required for persistent login sessions
-    // passport needs ability to serialize and deserialize users out of session
 
     // used to serialize the user for the session
     passport.serializeUser(function(user, done) {
@@ -214,8 +215,7 @@ module.exports = function(passport) {
                 // find the user in the database based on their facebook id
                 User.findOne({ 'facebook.id' : profile.id }, function(err, user) {
 
-                    // if there is an error, stop everything and return that
-                    // ie an error connecting to the database
+                    // if there is an error return error
                     if (err)
                         return done(err);
 
@@ -257,7 +257,7 @@ module.exports = function(passport) {
         }));
 };
 
-// Define a middleware function to be used for every secured routes
+// Middleware to be used for secure routes
 exports.ensureAuthed = function ensureAuthenticated(req, res, next){
     if (!req.isAuthenticated())
         res.send(401);
