@@ -60,25 +60,10 @@ describe('FriendZone tests', function() {
     })
 
 
-    describe('Event tests', function() {
-
-        /*//////EVENT//////*/
-        //function:
-        //function:
-        //function:
-        //function:
-        //var:
-        //var:
-        //var:
-        //var:
-
-
-    })
-
-
     describe('Landing tests', function(){
 
         /*//////LANDING//////*/
+        //function: newUser();
 
         it('returns new user', function(done){
             var newUser = new users.User({
@@ -92,6 +77,25 @@ describe('FriendZone tests', function() {
         })
 
     })
+
+
+    describe('Event tests', function() {
+
+        /*//////EVENT//////*/
+        //function: newEvent();
+
+        it('returns new event', function(done){
+            var newEvent = search.openNewEvent();
+
+            assert(newEvent != null);
+            done();
+        })
+
+
+    })
+
+
+
 
 
     describe('Navigation tests', function(){
